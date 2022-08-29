@@ -27,11 +27,12 @@ export const StudentsControl = (props) => {
                 })
             console.log(res)
         })
-    }, [state.page, state.program_id])
+    }, [state.page, state.program_id, state.offset])
 
     const showStudents = (p) => {
         setState({
             ...state,
+            page: 0,
             loading: true,
             program_id: p
         })
@@ -49,7 +50,7 @@ export const StudentsControl = (props) => {
     function countItemsToShow(totalCount, step){
         let countArray = [];
         while(+totalCount > 0){
-            countArray.push(totalCount)
+            countArray.push(step)
             totalCount -= step;
             step *= 2;
         }
@@ -63,8 +64,15 @@ export const StudentsControl = (props) => {
         content = (
             <>
                 <div>
-                    Отображать по
-                    {countItemsToShow(state.count, 2).map(i=>i)}
+                    Отображать по - {countItemsToShow(state.count, 2).map(
+                        (i)=> {
+                            return <div onClick={() => setState({
+                                ...state,
+                                loading: true,
+                                offset: i
+                            })}>{i}</div>;
+                        }
+                    )}
                 </div>
                 <StudentsList students={state.students}/>
                 <div>
