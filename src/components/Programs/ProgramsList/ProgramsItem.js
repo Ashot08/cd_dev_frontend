@@ -1,7 +1,10 @@
 import classes from './ProgramsItem.module.css';
 export const ProgramsItem = (props) => {
     return (
-        <div className={classes.programs__item} onClick={() => props.showStudents(props.id)}>
+        <div
+            className={classes.programs__item + ' ' + (props.isActive ? classes.active : '')}
+            onClick={ !props.isActive ? () => props.showStudents(props.id) : null}
+        >
             <div className={classes.programs__title}>
                 {props.title}
             </div>

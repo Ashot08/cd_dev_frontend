@@ -5,6 +5,11 @@
     padding: 20px;
     background-color: #fff;
 }
+.programs__item.active{
+    box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+    background-color: #c50000;
+    color: #fff;
+}
 .programs__item:hover{
     box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
 }

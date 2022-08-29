@@ -12,6 +12,7 @@ export const ProgramsList = (props) => {
         page: 0,
         offset: 6,
         count: 0,
+        selected: []
     });
     useEffect(() => {
         programAPI.getPrograms(state.page, state.offset).then(res => {
@@ -39,11 +40,12 @@ export const ProgramsList = (props) => {
     }else{
         content = (<div className={classes.programs_list}>
             {state.programs.map(
-                program=><ProgramsItem
+                program => <ProgramsItem
                     title={program.title}
                     date={program.create_date}
                     showStudents={props.showStudents}
                     id = {program.id}
+                    isActive = {+program.id === +props.activeProgram}
                     key={program.id}/> )
             }
         </div>)

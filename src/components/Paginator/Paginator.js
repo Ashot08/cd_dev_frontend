@@ -6,7 +6,7 @@ export const NavItem = (props) => {
             className={classes.nav__item + ' ' + (props.active ? classes.active : '')}
             onClick={!props.active ? () => props.changePage(props.page) : null}
         >
-            {props.page}
+            {+props.page + 1}
         </div>
     )
 }
