@@ -5,6 +5,7 @@ import {StudentsList} from "./StudentsList/StudentsList";
 import {Loader} from "../Loader/Loader";
 import {Paginator} from "../Paginator/Paginator";
 import {CreateUserForm} from "../forms/CreateUserForm/CreateUserForm";
+import {StudentsControlProtocol} from "../forms/Protocols/StudentsControlProtocol/StudentsControlProtocol";
 
 export const StudentsControl = (props) => {
 
@@ -150,7 +151,8 @@ export const StudentsControl = (props) => {
     return (
         <>
             {content}
-            {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} />: ''}
+            {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} /> : ''}
+            {state.program_id ? <StudentsControlProtocol /> : ''}
             <Programs activeProgram={state.program_id} showStudents={showStudents} />
         </>
     )
