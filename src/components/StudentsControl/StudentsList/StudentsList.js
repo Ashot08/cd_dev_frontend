@@ -15,13 +15,21 @@ export const StudentsList = (props) => {
                         <th>СНИЛС</th>
                         <th>Прогресс</th>
                         <th>
-                            <label className="cd__table_select_all_label">
-                                <input type="checkbox" data-action="cd__table_select_all" />
+                            <label className="">
+                                <input
+                                    checked={props.isSelectAll}
+                                    onChange={(e) => props.onStudentSelect(e, props.students, true)}
+                                    type="checkbox"
+                                />
                                     Все
                             </label>
                         </th>
                     </tr>
-                    {props.students.map(s => <StudentsListItem key={s.user_id} student={s} />)}
+                    {props.students.map(s => <StudentsListItem
+                        onStudentSelect={props.onStudentSelect}
+                        checked={props.selectedStudents.has(s.user_id)}
+                        key={s.user_id}
+                        student={s} />)}
                 </tbody>
             </table>
         </>

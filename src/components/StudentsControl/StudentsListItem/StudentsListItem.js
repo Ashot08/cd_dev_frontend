@@ -5,11 +5,17 @@ export const StudentsListItem = (props) => {
             <td>{props.student.user_name}</td>
             <td>{props.student.user_login}</td>
             <td>{props.student.user_email}</td>
-            <td>{props.student.user_snils}</td>
             <td>{props.student.user_pass}</td>
+            <td>{props.student.user_snils}</td>
             <td>{props.student.total_progress}</td>
             <td>
-                <input type="checkbox"/>
+                <label>
+                    <input
+                        onChange={(e) => props.onStudentSelect(e, props.student.user_id)}
+                        checked={props.checked}
+                        type="checkbox"
+                    />
+                </label>
             </td>
         </tr>
     )

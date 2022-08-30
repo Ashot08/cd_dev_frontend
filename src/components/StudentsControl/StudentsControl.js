@@ -13,7 +13,11 @@ export const StudentsControl = (props) => {
         page: 0,
         offset: 2,
         count: 0,
-        students: []
+        students: [],
+        selectedStudents: new Set(),
+        selectedStudentsCount: 0,
+        isSelectAll: false
+        //isSelectedStudentsAll: false
     });
 
     useEffect(() => {
@@ -23,11 +27,11 @@ export const StudentsControl = (props) => {
                     ...state,
                     loading: false,
                     students: res.students,
-                    count: res.count
+                    count: res.count,
                 })
             console.log(res)
         })
-    }, [state.page, state.program_id, state.offset])
+    }, [state.page, state.program_id, state.offset, state.selectedStudentsCount])
 
     const showStudents = (p) => {
         setState({
@@ -43,10 +47,57 @@ export const StudentsControl = (props) => {
             {
                 ...state,
                 loading: true,
-                page: p
+                page: p,
+                isSelectAll: false
             }
         )
     }
+
+    const onStudentSelect = (e, studentId, isSelectAll = false) => {
+
+        e.target.disabled = true;
+        setTimeout(()=>e.target.disabled = false, 1000);
+        let selectedStudentsClone = new Set(state.selectedStudents);
+
+        if(isSelectAll){
+            let isSelectAll = false;
+            if(e.target.checked){
+                isSelectAll = true;
+                selectedStudentsClone = new Set( [...selectedStudentsClone, ...studentId.map(s=>s.user_id)]);
+            }else{
+                selectedStudentsClone = new Set();
+            }
+            setState({
+                ...state,
+                selectedStudents: selectedStudentsClone,
+                selectedStudentsCount: selectedStudentsClone.size,
+                isSelectAll: isSelectAll
+            })
+            return;
+        }
+
+        if( selectedStudentsClone.has(studentId) ){
+            selectedStudentsClone.delete(studentId)
+        }else{
+            selectedStudentsClone.add(studentId)
+        }
+
+        setState({
+            ...state,
+            selectedStudents: selectedStudentsClone,
+            selectedStudentsCount: selectedStudentsClone.size
+        })
+
+    }
+
+    const onStudentReset = () => {
+        setState({
+            ...state,
+            isSelectAll: false,
+            selectedStudents: new Set()
+        })
+    }
+
     function countItemsToShow(totalCount, step){
         let countArray = [];
         while(+totalCount > 0){
@@ -66,15 +117,23 @@ export const StudentsControl = (props) => {
                 <div>
                     Отображать по - {countItemsToShow(state.count, 2).map(
                         (i)=> {
-                            return <div onClick={() => setState({
+                            return <div key={'show_count_' + i} onClick={() => setState({
                                 ...state,
                                 loading: true,
                                 offset: i
                             })}>{i}</div>;
                         }
                     )}
+                    <div>
+                        <button onClick={onStudentReset}>Сбросить выбор</button>
+                    </div>
                 </div>
-                <StudentsList students={state.students}/>
+                <StudentsList
+                    onStudentSelect={onStudentSelect}
+                    selectedStudents={state.selectedStudents}
+                    students={state.students}
+                    isSelectAll={state.isSelectAll}
+                />
                 <div>
                     {state.count && !state.loading ? <Paginator page={state.page} count={Math.ceil(state.count / state.offset)} changePage={changePage} /> : ''}
                 </div>
