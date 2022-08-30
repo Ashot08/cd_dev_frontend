@@ -38,5 +38,21 @@ export const studentAPI = {
                 // Prints result from `response.json()` in getRequest
             })
             .catch(error => console.error(error))
+    },
+
+    createStudent(data){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__user&create`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                return data;
+            })
+            .catch(error => console.error(error))
+
     }
 }

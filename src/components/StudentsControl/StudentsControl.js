@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {StudentsList} from "./StudentsList/StudentsList";
 import {Loader} from "../Loader/Loader";
 import {Paginator} from "../Paginator/Paginator";
+import {CreateUserForm} from "../forms/CreateUserForm/CreateUserForm";
 
 export const StudentsControl = (props) => {
 
@@ -17,7 +18,6 @@ export const StudentsControl = (props) => {
         selectedStudents: new Set(),
         selectedStudentsCount: 0,
         isSelectAll: false
-        //isSelectedStudentsAll: false
     });
 
     useEffect(() => {
@@ -60,9 +60,8 @@ export const StudentsControl = (props) => {
         let selectedStudentsClone = new Set(state.selectedStudents);
 
         if(isSelectAll){
-            let isSelectAll = false;
+
             if(e.target.checked){
-                isSelectAll = true;
                 selectedStudentsClone = new Set( [...selectedStudentsClone, ...studentId.map(s=>s.user_id)]);
             }else{
                 selectedStudentsClone = new Set();
@@ -71,7 +70,7 @@ export const StudentsControl = (props) => {
                 ...state,
                 selectedStudents: selectedStudentsClone,
                 selectedStudentsCount: selectedStudentsClone.size,
-                isSelectAll: isSelectAll
+                isSelectAll: !state.isSelectAll
             })
             return;
         }
@@ -98,6 +97,10 @@ export const StudentsControl = (props) => {
         })
     }
 
+    const onStudentCreate = (data) => {
+        return studentAPI.createStudent(data)
+    }
+
     function countItemsToShow(totalCount, step){
         let countArray = [];
         while(+totalCount > 0){
@@ -120,7 +123,8 @@ export const StudentsControl = (props) => {
                             return <div key={'show_count_' + i} onClick={() => setState({
                                 ...state,
                                 loading: true,
-                                offset: i
+                                offset: i,
+                                page: 0
                             })}>{i}</div>;
                         }
                     )}
@@ -146,6 +150,7 @@ export const StudentsControl = (props) => {
     return (
         <>
             {content}
+            {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} />: ''}
             <Programs activeProgram={state.program_id} showStudents={showStudents} />
         </>
     )
