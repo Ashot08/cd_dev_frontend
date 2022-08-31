@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import classes from './UsersFilter.module.css';
 
 export const UsersFilter = (props) => {
     const [startDate, setStartDate] = useState(new Date());
@@ -19,18 +20,22 @@ export const UsersFilter = (props) => {
     },[startDate, endDate])
 
     return (<>
-        Дата окончания:
-        <DatePicker
-            selected={startDate}
-            onChange={onChange}
-            startDate={startDate}
-            endDate={endDate}
-            selectsRange
-            showDisabledMonthNavigation
-        />
-        <button onClick={() => {
-            setStartDate(null);
-            setEndDate(null);
-        }}>Сбросить фильтр по дате</button>
+        <div className={classes.dateFilter}>
+            Дата окончания:
+            <div>
+                <DatePicker
+                    selected={startDate}
+                    onChange={onChange}
+                    startDate={startDate}
+                    endDate={endDate}
+                    selectsRange
+                    showDisabledMonthNavigation
+                />
+            </div>
+            <button onClick={() => {
+                setStartDate(null);
+                setEndDate(null);
+            }}>Сбросить фильтр по дате</button>
+        </div>
     </>)
 }
