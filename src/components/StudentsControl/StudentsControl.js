@@ -102,6 +102,10 @@ export const StudentsControl = (props) => {
         return studentAPI.createStudent(data)
     }
 
+    const onCreateStudentProtocol = (data) => {
+        return studentAPI.getStudentsProtocol(data);
+    }
+
     function countItemsToShow(totalCount, step){
         let countArray = [];
         while(+totalCount > 0){
@@ -152,7 +156,7 @@ export const StudentsControl = (props) => {
         <>
             {content}
             {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} /> : ''}
-            {state.program_id ? <StudentsControlProtocol /> : ''}
+            {state.program_id ? <StudentsControlProtocol onSubmit={onCreateStudentProtocol} /> : ''}
             <Programs activeProgram={state.program_id} showStudents={showStudents} />
         </>
     )

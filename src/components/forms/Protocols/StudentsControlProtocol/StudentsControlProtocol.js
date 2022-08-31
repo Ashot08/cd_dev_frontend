@@ -41,7 +41,12 @@ export const StudentsControlProtocol = (props) => {
         console.log(result)
         setState({
             ...state,
-            formResult: result.message
+            formResult: (<a href={'https://readsvch.store/' + result.message} target="_blank">
+                Скачать файл
+               <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+                </svg>
+            </a>)
         })
     }
 
@@ -97,7 +102,7 @@ export const StudentsControlProtocol = (props) => {
                         <input onChange={(e) => onChangeForm(e)} value={state.data.hours} name={'hours'} type="text" placeholder={'Объем программы в часах'}/>
                     </label>
 
-                    <input type="submit" value={'Добавить'}/>
+                    <input type="submit" value={'Сгенерировать'}/>
                 </form>
                 :
                 ''
