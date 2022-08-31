@@ -16,7 +16,6 @@ export const programAPI = {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('SUCCESS');
                 return data;
                 // Prints result from `response.json()` in getRequest
             })
@@ -25,15 +24,15 @@ export const programAPI = {
 }
 
 export const studentAPI = {
-    getStudents(program_id, page = 0, offset = 4){
-
+    getStudents(program_id, page = 0, offset = 4, filters = {}){
+        headers.set("Content-Type", "application/json");
         return fetch(`${root}/wp-json/courses_dashboard/v1/cd__students&program_id=${program_id}&page=${page}&offset=${offset}`, {
-            method: 'GET',
-            headers
+            method: 'POST',
+            headers,
+            body: JSON.stringify(filters)
         })
             .then(response => response.json())
             .then(data => {
-                console.log('SUCCESS');
                 return data;
                 // Prints result from `response.json()` in getRequest
             })

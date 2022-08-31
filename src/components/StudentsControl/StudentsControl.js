@@ -17,16 +17,23 @@ export const StudentsControl = (props) => {
         program_id: 0,
         programTitle: '',
         page: 0,
-        offset: 2,
+        offset: 10,
         count: 0,
         students: [],
         selectedStudents: new Set(),
         selectedStudentsCount: 0,
-        isSelectAll: false
+        isSelectAll: false,
+        filters: {
+            dateFilter: {
+                from: '',
+                to: ''
+            }
+        }
+
     });
 
     useEffect(() => {
-        studentAPI.getStudents(state.program_id, state.page, state.offset).then(res => {
+        studentAPI.getStudents(state.program_id, state.page, state.offset, state.filters).then(res => {
             setState(
                 {
                     ...state,
@@ -34,9 +41,8 @@ export const StudentsControl = (props) => {
                     students: res.students,
                     count: res.count,
                 })
-            console.log(res)
         })
-    }, [state.page, state.program_id, state.offset, state.selectedStudentsCount])
+    }, [state.page, state.program_id, state.offset, state.selectedStudentsCount, state.filters])
 
     const showStudents = (p, programTitle = '') => {
         setState({
@@ -115,6 +121,21 @@ export const StudentsControl = (props) => {
         return studentAPI.getStudentsToExcel(data);
     }
 
+    const onDateFilter = (filter) => {
+        setState({
+            ...state,
+            page: 0,
+            filters: {
+                ...state.filters,
+                dateFilter: {
+                        from: filter.from,
+                        to: filter.to,
+                }
+            }
+        })
+        console.log(state.filters.dateFilter.from + ' - ' + state.filters.dateFilter.to)
+    }
+
     function countItemsToShow(totalCount, step){
         let countArray = [];
         while(+totalCount > 0){
@@ -133,7 +154,7 @@ export const StudentsControl = (props) => {
             <>
                 <div>
                     <div className={classes.showCounts}>
-                        <div className={classes.showCountText}>Отображать по: </div> {countItemsToShow(state.count, 2).map(
+                        <div className={classes.showCountText}>Отображать по: </div> {countItemsToShow(state.count, 5).map(
                         (i)=> {
                             const active = (+state.offset === +i ? ' ' + classes.active : '');
                             console.log(+state.offset === +i)
@@ -153,8 +174,6 @@ export const StudentsControl = (props) => {
                         <button onClick={onStudentReset}>Сбросить выбор</button>
                     </div>
                 </div>
-
-                <UsersFilter />
 
                 <StudentsList
                     onStudentSelect={onStudentSelect}
@@ -177,13 +196,19 @@ export const StudentsControl = (props) => {
             <div>
                 {state.programTitle ? (<h3>{state.programTitle}</h3>) : ''}
             </div>
+
+            {state.program_id ? <UsersFilter onDateFilter={onDateFilter} />: ''}
+
             {content}
+
             {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} /> : ''}
+
             {state.program_id ? <StudentsControlProtocol
                 students={Array.from(state.selectedStudents)}
                 onSubmit={onCreateStudentProtocol}
                 programTitle={state.programTitle}
             /> : ''}
+
             {state.program_id ? <StudentsToExcel
                 students={Array.from(state.selectedStudents)}
                 onSubmit={onStudentsToExcel}
