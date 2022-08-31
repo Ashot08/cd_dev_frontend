@@ -8,6 +8,7 @@ import {CreateUserForm} from "../forms/CreateUserForm/CreateUserForm";
 import {StudentsControlProtocol} from "../forms/Protocols/StudentsControlProtocol/StudentsControlProtocol";
 import {StudentsToExcel} from "../forms/Protocols/StudentsToExcel/StudentsToExcel";
 import classes from './StudentsControl.module.css';
+import {UsersFilter} from "../common/filters/UsersFIlter/UsersFilter";
 
 export const StudentsControl = (props) => {
 
@@ -131,7 +132,8 @@ export const StudentsControl = (props) => {
         content = (
             <>
                 <div>
-                    Отображать по - <div className={classes.showCounts}>{countItemsToShow(state.count, 2).map(
+                    <div className={classes.showCounts}>
+                        <div className={classes.showCountText}>Отображать по: </div> {countItemsToShow(state.count, 2).map(
                         (i)=> {
                             const active = (+state.offset === +i ? ' ' + classes.active : '');
                             console.log(+state.offset === +i)
@@ -151,6 +153,9 @@ export const StudentsControl = (props) => {
                         <button onClick={onStudentReset}>Сбросить выбор</button>
                     </div>
                 </div>
+
+                <UsersFilter />
+
                 <StudentsList
                     onStudentSelect={onStudentSelect}
                     selectedStudents={state.selectedStudents}
@@ -168,6 +173,10 @@ export const StudentsControl = (props) => {
 
     return (
         <>
+
+            <div>
+                {state.programTitle ? (<h3>{state.programTitle}</h3>) : ''}
+            </div>
             {content}
             {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} /> : ''}
             {state.program_id ? <StudentsControlProtocol

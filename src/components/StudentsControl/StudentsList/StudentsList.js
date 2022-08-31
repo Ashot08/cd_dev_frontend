@@ -14,6 +14,7 @@ export const StudentsList = (props) => {
                         <th>Пароль</th>
                         <th>СНИЛС</th>
                         <th>Прогресс</th>
+                        <th>Дата окончания</th>
                         <th>
                             <label className="">
                                 <input

@@ -11,6 +11,14 @@
     border-radius: 5px;
 }
 
+.showCountText{
+    padding: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+
 .showCount.active{
     border: 1px solid #c50000;
 }

@@ -8,6 +8,7 @@ export const StudentsListItem = (props) => {
             <td>{props.student.user_pass}</td>
             <td>{props.student.user_snils}</td>
             <td>{props.student.total_progress}</td>
+            <td>{props.student.start_date}</td>
             <td>
                 <label>
                     <input
