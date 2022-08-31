@@ -1,22 +1,39 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import InputMask from 'react-input-mask';
-
+import {studentAPI} from "../../../../rest";
+import {Loader} from "../../../Loader/Loader";
+import classes from './StudentsControlProtocol.module.css';
 
 export const StudentsControlProtocol = (props) => {
     const [state, setState] = useState({
         isShowed: false,
+        isLoading: false,
         data: {
             full_name: '',
-            program_name: '',
+            program_name: props.programTitle,
             date: '',
             reg_number: '',
             comission_lead: '',
             comission_member_1: '',
             comission_member_2: '',
             hours: '',
+            users_ids: props.students,
         },
         formResult: ''
     });
+
+    useEffect(() => {
+        setState({
+            ...state,
+            data: {
+                ...state.data,
+                program_name: props.programTitle,
+                users_ids: props.students,
+            }
+        })
+    }, [props.students, props.programTitle])
+
+
     const onShowForm = () => {
         setState({
             ...state,
@@ -38,15 +55,20 @@ export const StudentsControlProtocol = (props) => {
     }
 
     const resultHandler = (result) => {
-        console.log(result)
-        setState({
-            ...state,
-            formResult: (<a href={'https://readsvch.store/' + result.message} target="_blank">
+        if(result.status === 'true'){
+            result = (<a href={'https://readsvch.store/' + result.message} target="_blank">
                 Скачать файл
-               <svg width="24" height="24" viewBox="0 0 24 24">
+                <svg width="24" height="24" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
                 </svg>
-            </a>)
+            </a>);
+        }else{
+            result = (<div>{result.message}</div>);
+        }
+        setState({
+            ...state,
+            isLoading: false,
+            formResult: result
         })
     }
 
@@ -65,7 +87,13 @@ export const StudentsControlProtocol = (props) => {
             {state.isShowed ?
                 <form onSubmit={(e) => {
                     e.preventDefault();
-                    props.onSubmit(state.data).then(res => resultHandler(res))
+                    setState({
+                        ...state,
+                        isLoading: true,
+                    })
+                    props.onSubmit(state.data).then(res => {
+                        resultHandler(res)
+                    })
                 }}>
                     <h4>Заполните нужные поля</h4>
 
@@ -107,8 +135,8 @@ export const StudentsControlProtocol = (props) => {
                 :
                 ''
             }
-            <div>
-                {state.formResult}
+            <div className={classes.result}>
+                {state.isLoading ? <Loader /> : state.formResult}
             </div>
         </div>
 

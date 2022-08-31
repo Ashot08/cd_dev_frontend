@@ -6,12 +6,15 @@ import {Loader} from "../Loader/Loader";
 import {Paginator} from "../Paginator/Paginator";
 import {CreateUserForm} from "../forms/CreateUserForm/CreateUserForm";
 import {StudentsControlProtocol} from "../forms/Protocols/StudentsControlProtocol/StudentsControlProtocol";
+import {StudentsToExcel} from "../forms/Protocols/StudentsToExcel/StudentsToExcel";
+import classes from './StudentsControl.module.css';
 
 export const StudentsControl = (props) => {
 
     const [state, setState] = useState({
         loading: false,
         program_id: 0,
+        programTitle: '',
         page: 0,
         offset: 2,
         count: 0,
@@ -34,12 +37,13 @@ export const StudentsControl = (props) => {
         })
     }, [state.page, state.program_id, state.offset, state.selectedStudentsCount])
 
-    const showStudents = (p) => {
+    const showStudents = (p, programTitle = '') => {
         setState({
             ...state,
             page: 0,
             loading: true,
-            program_id: p
+            program_id: p,
+            programTitle: programTitle
         })
     }
 
@@ -106,6 +110,10 @@ export const StudentsControl = (props) => {
         return studentAPI.getStudentsProtocol(data);
     }
 
+    const onStudentsToExcel = (data) => {
+        return studentAPI.getStudentsToExcel(data);
+    }
+
     function countItemsToShow(totalCount, step){
         let countArray = [];
         while(+totalCount > 0){
@@ -123,17 +131,23 @@ export const StudentsControl = (props) => {
         content = (
             <>
                 <div>
-                    Отображать по - {countItemsToShow(state.count, 2).map(
+                    Отображать по - <div className={classes.showCounts}>{countItemsToShow(state.count, 2).map(
                         (i)=> {
-                            return <div key={'show_count_' + i} onClick={() => setState({
-                                ...state,
-                                loading: true,
-                                offset: i,
-                                page: 0
-                            })}>{i}</div>;
+                            const active = (+state.offset === +i ? ' ' + classes.active : '');
+                            console.log(+state.offset === +i)
+                            return <div className={classes.showCount + active} key={'show_count_' + i} onClick={
+                                !active ?
+                                () => setState({
+                                    ...state,
+                                    loading: true,
+                                    offset: i,
+                                    page: 0
+                                }) : null
+                            }>{i}</div>;
                         }
-                    )}
-                    <div>
+                )}</div>
+                    <div className={classes.selectedCount}>
+                        <div className={classes.count}>{state.selectedStudents.size ? 'Количество выбранных студентов:  ' + state.selectedStudents.size : ''}</div>
                         <button onClick={onStudentReset}>Сбросить выбор</button>
                     </div>
                 </div>
@@ -156,7 +170,17 @@ export const StudentsControl = (props) => {
         <>
             {content}
             {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} /> : ''}
-            {state.program_id ? <StudentsControlProtocol onSubmit={onCreateStudentProtocol} /> : ''}
+            {state.program_id ? <StudentsControlProtocol
+                students={Array.from(state.selectedStudents)}
+                onSubmit={onCreateStudentProtocol}
+                programTitle={state.programTitle}
+            /> : ''}
+            {state.program_id ? <StudentsToExcel
+                students={Array.from(state.selectedStudents)}
+                onSubmit={onStudentsToExcel}
+            /> : ''}
+
+
             <Programs activeProgram={state.program_id} showStudents={showStudents} />
         </>
     )

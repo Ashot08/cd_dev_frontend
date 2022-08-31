@@ -1,10 +1,13 @@
 import {useState} from "react";
 import InputMask from 'react-input-mask';
 import {programAPI} from "../../../rest";
+import classes from '../forms.module.css';
+import {Loader} from "../../Loader/Loader";
 
 export const CreateUserForm = (props) => {
     const [state, setState] = useState({
         isShowed: false,
+        isLoading: false,
         data: {
             user_login: '',
             first_name: '',
@@ -39,6 +42,7 @@ export const CreateUserForm = (props) => {
         console.log(result)
         setState({
             ...state,
+            isLoading: false,
             formResult: result.message
         })
     }
@@ -50,6 +54,10 @@ export const CreateUserForm = (props) => {
             {state.isShowed ?
                 <form onSubmit={(e) => {
                     e.preventDefault();
+                    setState({
+                        ...state,
+                        isLoading: true,
+                    })
                     props.onSubmit(state.data).then(res => resultHandler(res))
                 }}>
                     <input     onChange={(e) => onChangeForm(e)} value={state.data.user_login} name={'user_login'} type="text" placeholder={'Логин'}/>
@@ -62,8 +70,8 @@ export const CreateUserForm = (props) => {
                 :
                 ''
             }
-            <div>
-                {state.formResult}
+            <div className={classes.result}>
+                {state.isLoading ? <Loader /> : state.formResult}
             </div>
         </div>
 
