@@ -1,6 +1,7 @@
 
 const headers = new Headers();
-const root = 'https://readsvch.store/';
+const root = 'https://readsvch.store';
+//const root = 'https://training.sibcbt.ru';
 
 export const programAPI = {
     getPrograms(page = 0, offset = 4){

@@ -13,11 +13,18 @@ export const UsersFilter = (props) => {
     };
 
     useEffect(() => {
-        props.onDateFilter({
-            from: startDate,
-            to: endDate,
-        })
-    },[startDate, endDate])
+        if (endDate){
+            props.onDateFilter({
+                from: startDate,
+                to: endDate,
+            })
+        }else if(!endDate && !startDate){
+            props.onDateFilter({
+                from: null,
+                to: null,
+            })
+        }
+    },[endDate])
 
     return (<>
         <div className={classes.dateFilter}>
