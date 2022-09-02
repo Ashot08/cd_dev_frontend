@@ -31,6 +31,7 @@ export const StudentsList = (props) => {
                         isSelectAll={props.isSelectAll}
                         checkboxesDisable={props.checkboxesDisable}
                         onStudentSelect={props.onStudentSelect}
+                        onStudentUpdate={props.onStudentUpdate}
                         checked={props.selectedStudents.has(s.user_id)}
                         key={s.user_id}
                         student={s} />)}
