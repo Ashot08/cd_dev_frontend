@@ -1,5 +1,6 @@
 import {StudentsListItem} from "../StudentsListItem/StudentsListItem";
 
+
 export const StudentsList = (props) => {
 
     return (
@@ -27,6 +28,8 @@ export const StudentsList = (props) => {
                         </th>
                     </tr>
                     {props.students.map(s => <StudentsListItem
+                        isSelectAll={props.isSelectAll}
+                        checkboxesDisable={props.checkboxesDisable}
                         onStudentSelect={props.onStudentSelect}
                         checked={props.selectedStudents.has(s.user_id)}
                         key={s.user_id}

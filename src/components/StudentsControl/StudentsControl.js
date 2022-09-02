@@ -1,5 +1,5 @@
 import {Programs} from "../Programs/Programs";
-import {programAPI, studentAPI} from "../../rest";
+import {programAPI, studentAPI, userAPI} from "../../rest";
 import {useEffect, useState} from "react";
 import {StudentsList} from "./StudentsList/StudentsList";
 import {Loader} from "../Loader/Loader";
@@ -14,6 +14,7 @@ export const StudentsControl = (props) => {
 
     const [state, setState] = useState({
         loading: false,
+        checkboxesDisable: false,
         program_id: 0,
         programTitle: '',
         page: 0,
@@ -37,6 +38,7 @@ export const StudentsControl = (props) => {
             setState(
                 {
                     ...state,
+                    checkboxesDisable: false,
                     loading: false,
                     students: res.students,
                     count: res.count,
@@ -67,8 +69,8 @@ export const StudentsControl = (props) => {
 
     const onStudentSelect = (e, studentId, isSelectAll = false) => {
 
-        e.target.disabled = true;
-        setTimeout(()=>e.target.disabled = false, 1000);
+        //e.target.disabled = true;
+        //setTimeout(()=>e.target.disabled = false, 1000);
         let selectedStudentsClone = new Set(state.selectedStudents);
 
         if(isSelectAll){
@@ -95,6 +97,8 @@ export const StudentsControl = (props) => {
 
         setState({
             ...state,
+            isSelectAll: false,
+            checkboxesDisable: true,
             selectedStudents: selectedStudentsClone,
             selectedStudentsCount: selectedStudentsClone.size
         })
@@ -119,6 +123,10 @@ export const StudentsControl = (props) => {
 
     const onStudentsToExcel = (data) => {
         return studentAPI.getStudentsToExcel(data);
+    }
+
+    const onStudentUpdate = (data) => {
+        return userAPI.updateUser(data);
     }
 
     const onDateFilter = (filter) => {
@@ -177,9 +185,11 @@ export const StudentsControl = (props) => {
 
                 <StudentsList
                     onStudentSelect={onStudentSelect}
+                    onStudentUpdate={onStudentUpdate}
                     selectedStudents={state.selectedStudents}
                     students={state.students}
                     isSelectAll={state.isSelectAll}
+                    checkboxesDisable={state.checkboxesDisable}
                 />
                 <div>
                     {state.count && !state.loading ? <Paginator page={state.page} count={Math.ceil(state.count / state.offset)} changePage={changePage} /> : ''}

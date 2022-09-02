@@ -79,10 +79,25 @@ export const studentAPI = {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 return data;
             })
             .catch(error => console.error(error))
     },
 
+}
+
+export const userAPI = {
+    updateUser(data){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__user&update`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+    },
 }
