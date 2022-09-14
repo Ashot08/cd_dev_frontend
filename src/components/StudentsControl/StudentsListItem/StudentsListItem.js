@@ -1,12 +1,16 @@
 import classes from './StudentsListItem.module.css';
 import {useState} from "react";
 import {Loader} from "../../Loader/Loader";
+import Popup from "reactjs-popup";
+import 'reactjs-popup/dist/index.css';
 
 export const StudentsListItem = (props) => {
     const [state, setState] = useState({
         isEditing : false,
         isLoading: false,
-        result: ''
+        result: '',
+        isOpenPopup: false,
+        programs: []
     });
 
     const Edit = (props) => {
@@ -64,10 +68,38 @@ export const StudentsListItem = (props) => {
         </>)
     }
 
+
+    const showUserData = () => {
+        console.log(props.student.user_name)
+    }
+
+
     return (
         <tr>
             <td>{props.student.user_id}</td>
-            <td>{props.student.user_name} <Edit name={'display_name'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
+            <td>
+                <span onClick={() => setState({...state, isOpenPopup: true})} className={classes.user_name}>{props.student.user_name}</span>
+                <Popup
+                    open={state.isOpenPopup}
+                    modal
+                    nested
+                >
+                    <div className={classes.popup}>
+                        <div>
+                            <strong>{props.student.user_name}</strong> ({props.student.user_login})
+                        </div>
+                        <div>
+                            <strong>Информация о студенте:</strong>
+                        </div>
+                        <div>
+                            <div><strong>Программы:</strong></div>
+                            <div>
+
+                            </div>
+                        </div>
+                    </div>
+                </Popup>
+                <Edit name={'display_name'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_login}</td>
             <td>{props.student.user_email}<Edit name={'user_email'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_pass} <Edit name={'user_pass'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
