@@ -10,12 +10,12 @@ import {StudentsToExcel} from "../forms/Protocols/StudentsToExcel/StudentsToExce
 import classes from './StudentsControl.module.css';
 import {UsersFilter} from "../common/filters/UsersFIlter/UsersFilter";
 
-export const StudentsControl = (props) => {
+export const StudentsControlAll = (props) => {
 
     const [state, setState] = useState({
         loading: false,
         checkboxesDisable: false,
-        program_id: 0,
+        program_id: 'all',
         programTitle: '',
         page: 0,
         offset: 10,
@@ -136,8 +136,8 @@ export const StudentsControl = (props) => {
             filters: {
                 ...state.filters,
                 dateFilter: {
-                        from: filter.from,
-                        to: filter.to,
+                    from: filter.from,
+                    to: filter.to,
                 }
             }
         })
@@ -168,15 +168,15 @@ export const StudentsControl = (props) => {
                             console.log(+state.offset === +i)
                             return <div className={classes.showCount + active} key={'show_count_' + i} onClick={
                                 !active ?
-                                () => setState({
-                                    ...state,
-                                    loading: true,
-                                    offset: i,
-                                    page: 0
-                                }) : null
+                                    () => setState({
+                                        ...state,
+                                        loading: true,
+                                        offset: i,
+                                        page: 0
+                                    }) : null
                             }>{i}</div>;
                         }
-                )}</div>
+                    )}</div>
                     <div className={classes.selectedCount}>
                         <div className={classes.count}>{state.selectedStudents.size ? 'Количество выбранных студентов:  ' + state.selectedStudents.size : ''}</div>
                         <button onClick={onStudentReset}>Сбросить выбор</button>
@@ -197,7 +197,7 @@ export const StudentsControl = (props) => {
             </>
         );
     }else if(state.program_id){
-        content= 'На этом курсе нет студентов';
+        content= 'Нет студентов';
     }
 
     return (
@@ -210,8 +210,6 @@ export const StudentsControl = (props) => {
 
             {content}
 
-            {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} /> : ''}
-
             {state.program_id ? <StudentsControlProtocol
                 students={Array.from(state.selectedStudents)}
                 onSubmit={onCreateStudentProtocol}
@@ -223,8 +221,6 @@ export const StudentsControl = (props) => {
                 onSubmit={onStudentsToExcel}
             /> : ''}
 
-
-            <Programs activeProgram={state.program_id} showStudents={showStudents} />
         </>
     )
 }
