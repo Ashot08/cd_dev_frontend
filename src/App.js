@@ -7,8 +7,8 @@ function App() {
     return (
         <BrowserRouter>
             <div className="App">
-                <Link to="/students_control">Stud control</Link>
-                <Link to="/students_control/all">Stud control all</Link>
+                <Link to="/students_control">Контроль студентов</Link>
+                <Link to="/students_control/all">Все студенты</Link>
                 <Routes>
                     <Route path={'/students_control'} element={<StudentsControl/>} />
                     <Route path={'/students_control/all'} element={<StudentsControlAll/>} />
