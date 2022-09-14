@@ -81,9 +81,19 @@ export const StudentsListItem = (props) => {
                 <span onClick={() => setState({...state, isOpenPopup: true})} className={classes.user_name}>{props.student.user_name}</span>
                 <Popup
                     open={state.isOpenPopup}
+                    onClose = {() => {setState({
+                        ...state,
+                        isOpenPopup: false
+                    })}}
                     modal
                     nested
                 >
+                    <a className={classes.close} onClick={() => setState({
+                        ...state,
+                        isOpenPopup: false
+                    })}>
+                        &times;
+                    </a>
                     <div className={classes.popup}>
                         <div>
                             <strong>{props.student.user_name}</strong> ({props.student.user_login})

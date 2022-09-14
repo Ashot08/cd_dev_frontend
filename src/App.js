@@ -12,15 +12,15 @@ function App() {
     return (
         <BrowserRouter>
             <div className="App">
-                <Link to="/account/students_control">Контроль студентов</Link>
-                <Link to="/account/students_control_all">Все студенты</Link>
+                <Link to="/account/students_control"><button>Контроль студентов</button></Link>
+                <Link to="/account/students_control_all"><button>Все студенты</button></Link>
                 <Routes>
                     <Route path={'/account/students_control'} element={<StudentsControl/>} />
                     <Route path={'/account/students_control_all'} element={<StudentsControlAll/>} />
                 </Routes>
 
 
-                {/*<StudentsControl />*/}
+                {/*{<StudentsControl />}*/}
             </div>
         </BrowserRouter>
     )

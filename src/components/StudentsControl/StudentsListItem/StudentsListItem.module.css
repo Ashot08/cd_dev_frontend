@@ -30,4 +30,13 @@ td:hover .edit{
 
 .popup{
     padding: 20px;
+    position: relative;
+}
+
+.close{
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 6px;
+    z-index: 1;
 }
