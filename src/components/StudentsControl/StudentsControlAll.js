@@ -130,6 +130,10 @@ export const StudentsControlAll = (props) => {
         return userAPI.updateUser(data);
     }
 
+    const onGetPrograms = (page, offset) => {
+        return programAPI.getPrograms(page, offset);
+    }
+
     const onDateFilter = (filter) => {
         setState({
             ...state,
@@ -142,7 +146,6 @@ export const StudentsControlAll = (props) => {
                 }
             }
         })
-        console.log(state.filters.dateFilter.from + ' - ' + state.filters.dateFilter.to)
     }
 
     function countItemsToShow(totalCount, step){
@@ -191,6 +194,7 @@ export const StudentsControlAll = (props) => {
                     students={state.students}
                     isSelectAll={state.isSelectAll}
                     checkboxesDisable={state.checkboxesDisable}
+                    onGetPrograms={onGetPrograms}
                 />
                 <div>
                     {state.count && !state.loading ? <Paginator page={state.page} count={Math.ceil(state.count / state.offset)} changePage={changePage} /> : ''}

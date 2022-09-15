@@ -1,5 +1,5 @@
 import classes from './StudentsListItem.module.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Loader} from "../../Loader/Loader";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
@@ -8,10 +8,52 @@ export const StudentsListItem = (props) => {
     const [state, setState] = useState({
         isEditing : false,
         isLoading: false,
+        isProgramsUpdating: false,
         result: '',
         isOpenPopup: false,
-        programs: []
+        programs: [],
+        student_programs: new Set(props.student.student_programs),
+        programsUpdateResult: '',
     });
+
+
+    useEffect(() => {
+        if(state.isOpenPopup){
+            props.onGetPrograms(0, 999).then(res => {
+                setState({
+                    ...state,
+                    programs: res.programs
+                })
+            })
+        }else{
+            setState({
+                ...state,
+                programs: []
+            })
+        }
+    }, [state.isOpenPopup])
+
+    const checkProgram = (e) => {
+
+        let studentProgramsClone = new Set(state.student_programs);
+
+        if(state.student_programs.has(e.target.value)){
+            studentProgramsClone.delete(e.target.value);
+            setState({
+                ...state,
+                student_programs: studentProgramsClone
+            })
+        }else{
+
+            studentProgramsClone.add(e.target.value);
+
+            setState({
+                ...state,
+                student_programs: studentProgramsClone
+            })
+        }
+
+    }
 
     const Edit = (props) => {
 
@@ -69,16 +111,62 @@ export const StudentsListItem = (props) => {
     }
 
 
+    const programsHTML = <form onSubmit={(e) => {
+        setState({
+            ...state,
+            isProgramsUpdating: true,
+        })
+        e.preventDefault();
+        const data = {
+            user_id: props.student.user_id,
+            programs: Array.from(state.student_programs)
+        }
+        props.onUpdateUserPrograms(data).then(res => {
+            setState({
+                ...state,
+                isProgramsUpdating: false,
+                programsUpdateResult: res.message
+            })
+        });
+    }}>{
+        state.programs.map((p) => {
+            return (
+                <>
+                    <div>
+                        <label key={p.id} >
+                            <input onChange={checkProgram} checked={state.student_programs.has(p.id)} name={p.id} type={'checkbox'} value={p.id} />
+                            {p.title}
+                        </label>
+                    </div>
+                </>
+            )
+        })
+    }
+        <input type={"submit"} value={'Обновить'} />
+
+        <div>
+            {state.isProgramsUpdating ? <Loader/> : state.programsUpdateResult}
+        </div>
+    </form>;
+
     const showUserData = () => {
         console.log(props.student.user_name)
     }
+
 
 
     return (
         <tr>
             <td>{props.student.user_id}</td>
             <td>
-                <span onClick={() => setState({...state, isOpenPopup: true})} className={classes.user_name}>{props.student.user_name}</span>
+                <span onClick={
+                    () => {
+                        setState({
+                            ...state,
+                            isOpenPopup: true
+                        })
+                    }
+                } className={classes.user_name}>{props.student.user_name}</span>
                 <Popup
                     open={state.isOpenPopup}
                     onClose = {() => {setState({
@@ -104,7 +192,12 @@ export const StudentsListItem = (props) => {
                         <div>
                             <div><strong>Программы:</strong></div>
                             <div>
-
+                                { state.programs.length
+                                    ?
+                                    programsHTML
+                                    :
+                                    <Loader />
+                                }
                             </div>
                         </div>
                     </div>

@@ -22,6 +22,7 @@ export const programAPI = {
             })
             .catch(error => console.error(error))
     }
+
 }
 
 export const studentAPI = {
@@ -100,4 +101,19 @@ export const userAPI = {
             })
             .catch(error => console.error(error))
     },
+
+    updateUserPrograms(data){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__user&update_programs`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+    }
+
 }

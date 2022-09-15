@@ -34,7 +34,10 @@ export const StudentsList = (props) => {
                         onStudentUpdate={props.onStudentUpdate}
                         checked={props.selectedStudents.has(s.user_id)}
                         key={s.user_id}
-                        student={s} />)}
+                        student={s}
+                        onGetPrograms={props.onGetPrograms}
+                        onUpdateUserPrograms={props.onUpdateUserPrograms}
+                    />)}
                 </tbody>
             </table>
         </>
