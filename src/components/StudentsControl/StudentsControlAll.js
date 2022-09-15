@@ -134,6 +134,10 @@ export const StudentsControlAll = (props) => {
         return programAPI.getPrograms(page, offset);
     }
 
+    const onUpdateUserPrograms = (data) => {
+        return userAPI.updateUserPrograms(data);
+    }
+
     const onDateFilter = (filter) => {
         setState({
             ...state,
@@ -195,6 +199,7 @@ export const StudentsControlAll = (props) => {
                     isSelectAll={state.isSelectAll}
                     checkboxesDisable={state.checkboxesDisable}
                     onGetPrograms={onGetPrograms}
+                    onUpdateUserPrograms={onUpdateUserPrograms}
                 />
                 <div>
                     {state.count && !state.loading ? <Paginator page={state.page} count={Math.ceil(state.count / state.offset)} changePage={changePage} /> : ''}
