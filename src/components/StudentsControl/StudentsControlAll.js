@@ -29,7 +29,8 @@ export const StudentsControlAll = (props) => {
             dateFilter: {
                 from: '',
                 to: ''
-            }
+            },
+            displayNameFilter: ''
         }
 
     });
@@ -152,6 +153,18 @@ export const StudentsControlAll = (props) => {
         })
     }
 
+    const onDisplayNameFilter = (filter) => {
+        setState({
+            ...state,
+            loading: true,
+            page: 0,
+            filters: {
+                ...state.filters,
+                displayNameFilter: filter
+            }
+        })
+    }
+
     function countItemsToShow(totalCount, step){
         let countArray = [];
         while(+totalCount > 0){
@@ -217,7 +230,7 @@ export const StudentsControlAll = (props) => {
                 {state.programTitle ? (<h3>{state.programTitle}</h3>) : ''}
             </div>
 
-            {state.program_id ? <UsersFilter onDateFilter={onDateFilter} />: ''}
+            {state.program_id ? <UsersFilter filters={state.filters} onDisplayNameFilter={onDisplayNameFilter} onDateFilter={onDateFilter} />: ''}
 
             {content}
 

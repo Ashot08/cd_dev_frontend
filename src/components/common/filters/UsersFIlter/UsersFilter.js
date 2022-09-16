@@ -4,6 +4,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import classes from './UsersFilter.module.css';
 
 export const UsersFilter = (props) => {
+    const [state, setState] = useState({
+        displayNameInput: props.filters.displayNameFilter
+    })
+
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(null);
     const onChange = (dates) => {
@@ -26,6 +30,11 @@ export const UsersFilter = (props) => {
         }
     },[endDate])
 
+    const onDisplayNameFilter = (e) => {
+        e.preventDefault();
+        props.onDisplayNameFilter(state.displayNameInput);
+    }
+
     return (<>
         <div className={classes.dateFilter}>
             Дата окончания:
@@ -43,6 +52,19 @@ export const UsersFilter = (props) => {
                 setStartDate(null);
                 setEndDate(null);
             }}>Сбросить фильтр по дате</button>
+        </div>
+        <div>
+            <form onSubmit={onDisplayNameFilter}>
+                <input onChange={(e) =>{
+                    setState({
+                        ...state,
+                        displayNameInput: e.target.value
+                    })
+                }
+                } type="text" name={'display_name'} value={state.displayNameInput}/>
+                <input type="submit" value={'Искать'}/>
+            </form>
+
         </div>
     </>)
 }

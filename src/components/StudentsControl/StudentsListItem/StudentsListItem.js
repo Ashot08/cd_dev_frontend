@@ -206,7 +206,7 @@ export const StudentsListItem = (props) => {
             <td>{props.student.user_login}</td>
             <td>{props.student.user_email}<Edit name={'user_email'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_pass} <Edit name={'user_pass'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
-            <td>{props.student.user_snils}<Edit name={'user_snils'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
+            <td>{props.student.user_snils.toString()}<Edit name={'user_snils'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.total_progress}</td>
             <td>{props.student.start_date}</td>
             <td>
