@@ -220,7 +220,7 @@ export const StudentsControlAll = (props) => {
             </>
         );
     }else if(state.program_id){
-        content= 'Нет студентов';
+        content= <div className={classes.alarm}>Нет студентов</div>;
     }
 
     return (

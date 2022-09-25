@@ -36,35 +36,49 @@ export const UsersFilter = (props) => {
     }
 
     return (<>
-        <div className={classes.dateFilter}>
-            Дата окончания:
-            <div>
-                <DatePicker
-                    selected={startDate}
-                    onChange={onChange}
-                    startDate={startDate}
-                    endDate={endDate}
-                    selectsRange
-                    showDisabledMonthNavigation
-                />
+        <div className={classes.filter_wrapper}>
+            <div className={classes.filter_item}>
+                <div className={classes.dateFilter}>
+                    Дата окончания:
+                    <div>
+                        <DatePicker
+                            selected={startDate}
+                            onChange={onChange}
+                            startDate={startDate}
+                            endDate={endDate}
+                            selectsRange
+                            showDisabledMonthNavigation
+                        />
+                    </div>
+                    <button onClick={() => {
+                        setStartDate(null);
+                        setEndDate(null);
+                    }}>Сбросить фильтр по дате</button>
+                </div>
             </div>
-            <button onClick={() => {
-                setStartDate(null);
-                setEndDate(null);
-            }}>Сбросить фильтр по дате</button>
-        </div>
-        <div>
-            <form onSubmit={onDisplayNameFilter}>
-                <input onChange={(e) =>{
-                    setState({
-                        ...state,
-                        displayNameInput: e.target.value
-                    })
-                }
-                } type="text" name={'display_name'} value={state.displayNameInput}/>
-                <input type="submit" value={'Искать'}/>
-            </form>
 
+            <div className={classes.filter_item}>
+                <form className={classes.filter_inner} onSubmit={onDisplayNameFilter}>
+                    <input
+                        onChange={(e) => {
+                            setState({
+                                ...state,
+                                displayNameInput: e.target.value
+                            })
+                        }
+                        }
+                        type="text"
+                        name={'display_name'}
+                        value={state.displayNameInput}
+                        placeholder={'Поиск по имени'}
+                    />
+                    {/*<input type="submit" value={'Искать'}/>*/}
+                    <button>Искать</button>
+                </form>
+
+            </div>
         </div>
+
+
     </>)
 }

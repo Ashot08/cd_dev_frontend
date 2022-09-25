@@ -3,3 +3,51 @@
     justify-content: flex-start;
     align-items: center;
 }
+
+.filter_inner{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.filter_wrapper{
+    display: flex;
+    margin: 10px 0;
+}
+
+.filter_item{
+    margin-right: 5px;
+}
+
+.filter_item button{
+    font-size: 12px;
+    max-height: 47px;
+    display: flex;
+    align-items: center;
+}
+
+.filter_item input[type="text"]{
+    padding: 10px;
+}
+
+.filter_item input[type="submit"]{
+    background: #cd2653;
+    border: none;
+    border-radius: 0;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.0333em;
+    line-height: 1.25;
+    margin: 0;
+    opacity: 1;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity 0.15s linear;
+    font-size: 12px;
+    max-height: 47px;
+    display: flex;
+    align-items: center;
+}
