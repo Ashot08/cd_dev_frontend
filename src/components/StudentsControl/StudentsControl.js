@@ -248,7 +248,7 @@ export const StudentsControl = (props) => {
             /> : ''}
 
 
-            <Programs activeProgram={state.program_id} showStudents={showStudents} />
+            <Programs editable={false} activeProgram={state.program_id} onProgramClick={showStudents} />
         </>
     )
 }

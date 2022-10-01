@@ -1,0 +1,8 @@
+.categories{
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+.categories label{
+    margin-right: 5px;
+}

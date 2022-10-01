@@ -4,14 +4,64 @@ let root = 'https://readsvch.store';
 root = 'https://training.sibcbt.ru';
 
 export const programAPI = {
-    getPrograms(page = 0, offset = 4){
+
+    getPrograms(data){
 
         // const username = 'AdminTraining';
         // const password = 'Bcy1 A3xL ne6o HvtC 8fAk nNBU';
-        // headers.set("Content-Type", "application/json");
+        headers.set("Content-Type", "application/json");
         // headers.set("Authorization", "Basic " + (`${username}:${password}`).toString('base64'));
 
-        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__programs&page=${page}&offset=${offset}`, {
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__programs`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+                // Prints result from `response.json()` in getRequest
+            })
+            .catch(error => console.error(error))
+    },
+
+    getTree( program_id ){
+
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__programs/tree=${program_id}`, {
+            method: 'GET',
+            headers
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+
+    },
+
+    delete( program_id ){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__programs/delete`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({program_id})
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+
+    }
+
+}
+
+
+export const programCatAPI = {
+
+    getCats(){
+
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__program_cat`, {
             method: 'GET',
             headers
         })
@@ -21,9 +71,41 @@ export const programAPI = {
                 // Prints result from `response.json()` in getRequest
             })
             .catch(error => console.error(error))
+    },
+
+
+    create( data ){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__program_cat/create`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+
+    },
+
+    delete( cat_id ){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__program_cat/delete`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({cat_id})
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+
     }
 
 }
+
 
 export const studentAPI = {
     getStudents(program_id, page = 0, offset = 4, filters = {}){

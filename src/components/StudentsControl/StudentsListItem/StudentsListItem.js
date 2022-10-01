@@ -19,7 +19,7 @@ export const StudentsListItem = (props) => {
 
     useEffect(() => {
         if(state.isOpenPopup){
-            props.onGetPrograms(0, 999).then(res => {
+            props.onGetPrograms({page: 0, offset: 999}).then(res => {
                 setState({
                     ...state,
                     programs: res.programs
@@ -188,6 +188,12 @@ export const StudentsListItem = (props) => {
                         </div>
                         <div>
                             <strong>Информация о студенте:</strong>
+                            <div>
+                                Email: {props.student.user_email}
+                            </div>
+                            <div>
+                                СНИЛС: {props.student.user_snils}
+                            </div>
                         </div>
                         <div>
                             <div><strong>Программы:</strong></div>
@@ -207,7 +213,7 @@ export const StudentsListItem = (props) => {
             <td>{props.student.user_email}<Edit name={'user_email'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_pass} <Edit name={'user_pass'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_snils.toString()}<Edit name={'user_snils'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
-            <td>{props.student.total_progress}</td>
+            <td className={classes.progress_td}>{props.student.total_progress}% </td>
             <td>{props.student.start_date}</td>
             <td>
                 <label className={classes.label__checkbox}>

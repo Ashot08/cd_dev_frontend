@@ -12,10 +12,15 @@ export const ProgramsList = (props) => {
         page: 0,
         offset: 6,
         count: 0,
-        selected: []
+        selected: [],
+        catsFilters: props.catsFilters
     });
     useEffect(() => {
-        programAPI.getPrograms(state.page, state.offset).then(res => {
+        programAPI.getPrograms({
+            page: state.page,
+            offset: state.offset,
+
+        }).then(res => {
             setState(
                 {
                     ...state,
@@ -24,7 +29,7 @@ export const ProgramsList = (props) => {
                     count: res.count
                 })
         })
-    }, [setState, state.page])
+    }, [setState, state.page, state.catsFilters])
     const changePage = (p) => {
         setState(
             {
@@ -40,13 +45,21 @@ export const ProgramsList = (props) => {
     }else{
         content = (<div className={classes.programs_list}>
             {state.programs.map(
-                program => <ProgramsItem
-                    title={program.title}
-                    date={program.create_date}
-                    showStudents={props.showStudents}
-                    id = {program.id}
-                    isActive = {+program.id === +props.activeProgram}
-                    key={program.id}/> )
+                (program) => {
+
+                        return (<ProgramsItem
+                            editable={props.editable}
+                            title={program.title}
+                            date={program.create_date}
+                            onProgramClick={props.onProgramClick}
+                            id = {program.id}
+                            isActive = {+program.id === +props.activeProgram}
+                            key={program.id}
+                            onProgramDelete={props.onProgramDelete}
+                        />)
+
+
+                })
             }
         </div>)
     }

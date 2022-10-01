@@ -25,3 +25,19 @@ table th {
   background-color: #cd2653;
   color: white;
 }
+.scbt__nav_btns{
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+.scbt__nav_btns button{
+  margin-right: 5px;
+  padding: 15px;
+  border: 1px solid transparent;
+}
+.scbt__nav_btns button:last-child{
+  margin-right: 0;
+}
+.scbt__nav_btns button.active{
+  border: 1px solid #000;
+}
