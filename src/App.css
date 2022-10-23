@@ -41,3 +41,10 @@ table th {
 .scbt__nav_btns button.active{
   border: 1px solid #000;
 }
+
+.cd__warning{
+  padding: 20px;
+  margin: 10px 0;
+  border: 1px solid red;
+  display: inline-block;
+}

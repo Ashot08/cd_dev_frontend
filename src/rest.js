@@ -59,9 +59,9 @@ export const programAPI = {
 
 export const programCatAPI = {
 
-    getCats(){
+    getCats(program_id= 3){
 
-        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__program_cat`, {
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__program_cat/program_id=${program_id}`, {
             method: 'GET',
             headers
         })
@@ -95,6 +95,21 @@ export const programCatAPI = {
             method: 'POST',
             headers,
             body: JSON.stringify({cat_id})
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+
+    },
+
+    assignCategoryToProgram ( data ) {
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__program_cat/assign`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
         })
             .then(response => response.json())
             .then(data => {

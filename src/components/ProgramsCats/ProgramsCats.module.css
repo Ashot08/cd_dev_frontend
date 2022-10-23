@@ -4,5 +4,21 @@
     margin: 10px 0;
 }
 .categories label{
-    margin-right: 5px;
+    margin-right: 10px;
+    padding:5px;
+    background-color: rgba(0,0,0,0.05);
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+}
+
+.delete_cat{
+    display: flex;
+    align-items: center;
+    opacity: 0.1;
+    color: red;
+}
+
+.categories label:hover .delete_cat{
+    opacity: 1;
 }

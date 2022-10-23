@@ -13,12 +13,12 @@ export const ProgramsList = (props) => {
         offset: 6,
         count: 0,
         selected: [],
-        catsFilters: props.catsFilters
     });
     useEffect(() => {
         programAPI.getPrograms({
             page: state.page,
             offset: state.offset,
+            categories: props.catsFilters
 
         }).then(res => {
             setState(
@@ -29,7 +29,7 @@ export const ProgramsList = (props) => {
                     count: res.count
                 })
         })
-    }, [setState, state.page, state.catsFilters])
+    }, [setState, state.page, props.catsFilters])
     const changePage = (p) => {
         setState(
             {
@@ -42,9 +42,10 @@ export const ProgramsList = (props) => {
     let content;
     if(state.loading){
         content = <Loader/>
-    }else{
+    }else if(Array.isArray(state.programs)){
         content = (<div className={classes.programs_list}>
-            {state.programs.map(
+            {
+                state.programs.map(
                 (program) => {
 
                         return (<ProgramsItem

@@ -14,7 +14,8 @@ export const CreateUserForm = (props) => {
             snils: '',
             user_email: '',
             user_position: '',
-            program_id: props.programId
+            program_id: props.programId,
+            user_pass: ''
         },
         formResult: ''
     });
@@ -28,14 +29,28 @@ export const CreateUserForm = (props) => {
     const onChangeForm = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        setState({
-            ...state,
-            data: {
-                ...state.data,
-                program_id: props.programId,
-                [name]: value
-            }
-        });
+
+        if(name === 'snils'){
+            setState({
+                ...state,
+                data: {
+                    ...state.data,
+                    program_id: props.programId,
+                    [name]: value,
+                    user_login: value,
+                    user_pass: value
+                }
+            });
+        }else{
+            setState({
+                ...state,
+                data: {
+                    ...state.data,
+                    program_id: props.programId,
+                    [name]: value
+                }
+            });
+        }
     }
 
     const resultHandler = (result) => {
@@ -60,7 +75,7 @@ export const CreateUserForm = (props) => {
                     })
                     props.onSubmit(state.data).then(res => resultHandler(res))
                 }}>
-                    <input     onChange={(e) => onChangeForm(e)} value={state.data.user_login} name={'user_login'} type="text" placeholder={'Логин'}/>
+                    <input hidden={true}  onChange={(e) => onChangeForm(e)} value={state.data.snils} name={'user_login'} type="text" placeholder={'Логин'}/>
                     <input     onChange={(e) => onChangeForm(e)} value={state.data.first_name} name={'first_name'} type="text" placeholder={'ФИО'}/>
                     <InputMask onChange={(e)     => onChangeForm(e)} value={state.data.snils} name={'snils'} mask="999-999-999 99" maskChar={null} placeholder={'СНИЛС'} />
                     <input     onChange={(e) => onChangeForm(e)} value={state.data.user_email} name={'user_email'} type="email" placeholder={'Email'}/>

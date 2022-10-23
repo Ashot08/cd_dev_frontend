@@ -1,17 +1,63 @@
 import classes from './ProgramsItem.module.css';
 import Popup from "reactjs-popup";
 import {Loader} from "../../Loader/Loader";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {programAPI, programCatAPI} from "../../../rest";
 export const ProgramsItem = (props) => {
 
     const [state, setState] = useState({
         isOpenConfirmDelete: false,
+        isOpenEditProgram: false,
         deletePending: false,
-        deleted: false
+        deleted: false,
+        cats: [],
+        catsActive: new Set(),
+        catToAssign: {id: 0, action: ''},
+        catsChangeResult: '',
+        catsLoading: false
     })
+
+    useEffect(() => {
+        if(state.isOpenEditProgram){
+            programCatAPI.getCats(props.id).then((res) => {
+                setState({
+                    ...state,
+                    cats: res.cats,
+                    catsActive: new Set(res.active)
+                })
+            })
+        }
+    }, [state.isOpenEditProgram])
+
+    useEffect( () => {
+        if(state.isOpenEditProgram){
+            setState({
+                ...state,
+                catsLoading: true,
+                catsChangeResult: ''
+            })
+
+            programCatAPI.assignCategoryToProgram({
+                action: state.catToAssign.action,
+                program_id: props.id,
+                program_cat_id: state.catToAssign.id
+            }).then((res) => {
+                setState({
+                    ...state,
+                    catsLoading: false,
+                    catsChangeResult: <div className={'cd__warning'}>{res.message}</div>
+                })
+            })
+        }
+
+    },[state.catToAssign] )
 
     const onEdit = (e) => {
         e.stopPropagation();
+        setState({
+            ...state,
+            isOpenEditProgram: true,
+        })
 
     }
     const onDelete = (e) => {
@@ -39,7 +85,36 @@ export const ProgramsItem = (props) => {
         })
     }
 
+    const onSubmitCategory = (e) => {
+
+        let catsActiveSet = new Set(state.catsActive);
+        let action = '';
+        if(e.target.checked){
+            action = 'add';
+            catsActiveSet.add(e.target.value)
+
+        }else{
+            action = 'delete';
+            catsActiveSet.delete(e.target.value);
+
+        }
+
+        setState({
+            ...state,
+            catsActive: catsActiveSet,
+            catToAssign: {action  , id: e.target.value}
+        })
+
+    }
+
     if(state.deleted) return;
+
+    const cats = state.cats.map((cat) => {
+        return <label key={cat.id}>
+            {cat.title}
+            <input onChange={onSubmitCategory} checked={state.catsActive.has(cat.id)} value={cat.id} type={'checkbox'}  />
+        </label>
+    })
 
     return (
         <div
@@ -91,6 +166,40 @@ export const ProgramsItem = (props) => {
                             ...state,
                             isOpenConfirmDelete: false
                         })}}>Отмена</button>
+                    </div>
+                </div>
+            </Popup>
+
+            <Popup
+                open={state.isOpenEditProgram}
+                onClose = {() => {setState({
+                    ...state,
+                    isOpenEditProgram: false
+                })}}
+                modal
+                nested
+            >
+                <a className={classes.close} onClick={() => setState({
+                    ...state,
+                    isOpenEditProgram: false
+                })}>
+                    &times;
+                </a>
+                <div className={classes.popup}>
+                    <div>
+                        <h3>Редактирование программы</h3>
+                    </div>
+                    <div>
+                        <div><strong>Присвоить категорию</strong></div>
+
+                        {state.catsLoading ? <Loader />: <div className={classes.categories}>{cats}</div>}
+
+                        <div>
+
+                                {state.catsChangeResult}
+
+                        </div>
+
                     </div>
                 </div>
             </Popup>

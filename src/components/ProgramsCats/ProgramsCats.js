@@ -10,7 +10,8 @@ export const ProgramsCats = (props) => {
         title: '',
         createResponse: '',
         cats: [],
-        selected: new Set()
+        selected: new Set(),
+        deletedId: 0
     })
 
     useEffect(() => {
@@ -24,7 +25,7 @@ export const ProgramsCats = (props) => {
             props.onFilterUpdate(state.selected)
         })
 
-    }, [setState, state.selected])
+    }, [setState, state.selected, state.deletedId])
 
     const onCreate = (e) => {
         e.preventDefault();
@@ -40,6 +41,22 @@ export const ProgramsCats = (props) => {
                 ...state,
                 loading: false,
                 createResponse: res.message
+            })
+        });
+    }
+
+    const onDelete = (cat_id) => {
+        setState({
+            ...state,
+            cats: [],
+            loading: true
+        })
+        programCatAPI.delete(cat_id).then(res=>{
+            setState({
+                ...state,
+                loading: false,
+                createResponse: res.message,
+                deletedId: res.id
             })
         });
     }
@@ -63,6 +80,12 @@ export const ProgramsCats = (props) => {
                             selected: new Set(selectedClone)
                         })
                     }} checked={state.selected.has(c.id)} value={c.id} type="checkbox"/>
+
+                    <span onClick={ () => onDelete(c.id)} className={classes.delete_cat}>
+                        <svg width={20} height={20} viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                        </svg>
+                    </span>
                 </label>
             )
         })
