@@ -154,11 +154,29 @@ export const studentAPI = {
     },
 
     createStudentMass(data){
-        headers.set("Content-Type", "application/json");
+         // headers.set("Content-Type", "application/json");
+         headers.set("Content-Type", "multipart/form-data");
+        // headers.set("Content-Type", "");
+
+
+        let fd = new FormData();
+        fd.append("file", data.file_path);
+        fd.append('program_id', data.program_id);
+
+        // for(var key of fd.entries()){
+        //     console.log('olonghohnson_' + key[0] + key[1])
+        // }
+
+
         return fetch(`${root}/wp-json/courses_dashboard/v1/cd__user&create_mass`, {
+
             method: 'POST',
-            headers,
-            body: JSON.stringify(data)
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            body: JSON.stringify(fd)
+            //body: data
+
         })
             .then(response => response.json())
             .then(data => {

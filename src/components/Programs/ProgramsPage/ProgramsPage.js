@@ -73,7 +73,7 @@ export const ProgramsPage = (props) => {
                     <div className="cd__program_hierarchy_list_item_wrapper">
                         <a href={li.link}>
                             <span>{li.name}</span>
-                            <span className="cd__progress_value"> - {li.progress} %</span>
+                            <span className="cd__progress_value">  {li.progress} </span>
                         </a>
                     </div>
                     :
@@ -109,12 +109,12 @@ export const ProgramsPage = (props) => {
                     ''
             }
 
-            {
-                state.program_id ?
-                    <CreateUserMassForm programId={state.program_id} onSubmit={onStudentMassCreate} />
-                    :
-                    ''
-            }
+            {/*{*/}
+            {/*    state.program_id ?*/}
+            {/*        <CreateUserMassForm programId={state.program_id} onSubmit={onStudentMassCreate} />*/}
+            {/*        :*/}
+            {/*        ''*/}
+            {/*}*/}
 
         </>
     )

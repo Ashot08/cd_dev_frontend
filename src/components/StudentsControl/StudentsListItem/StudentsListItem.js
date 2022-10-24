@@ -192,7 +192,7 @@ export const StudentsListItem = (props) => {
                                 Email: {props.student.user_email}
                             </div>
                             <div>
-                                СНИЛС: {props.student.user_snils}
+                                СНИЛС: {props.student.user_snils.toString()}
                             </div>
                         </div>
                         <div>
@@ -211,7 +211,7 @@ export const StudentsListItem = (props) => {
                 <Edit name={'display_name'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_login}</td>
             <td>{props.student.user_email}<Edit name={'user_email'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
-            <td>{props.student.user_pass} <Edit name={'user_pass'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
+            <td>{props.student.user_snils === props.student.user_login ? props.student.user_snils.toString() : '***'} <Edit name={'user_pass'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_snils.toString()}<Edit name={'user_snils'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td className={classes.progress_td}>{props.student.total_progress}% </td>
             <td>{props.student.start_date}</td>
