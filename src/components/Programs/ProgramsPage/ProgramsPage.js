@@ -1,10 +1,12 @@
 
 import {useEffect, useState} from "react";
 import {Programs} from "../Programs";
-import {programAPI} from "../../../rest";
+import {programAPI, studentAPI} from "../../../rest";
 import {logDOM} from "@testing-library/react";
 import {Loader} from "../../Loader/Loader";
 import {ProgramsCats} from "../../ProgramsCats/ProgramsCats";
+import {CreateUserForm} from "../../forms/CreateUserForm/CreateUserForm";
+import {CreateUserMassForm} from "../../forms/CreateUserForm/CreateUserMassForm";
 
 
 
@@ -38,6 +40,14 @@ export const ProgramsPage = (props) => {
             })
         }
 
+    }
+
+    const onStudentCreate = (data) => {
+        return studentAPI.createStudent(data)
+    }
+
+    const onStudentMassCreate = (data) => {
+        return studentAPI.createStudentMass(data)
     }
 
     const onProgramDelete = () => {
@@ -91,6 +101,21 @@ export const ProgramsPage = (props) => {
             <ProgramsCats onFilterUpdate={onFilterUpdate} />
 
             <Programs catsFilters={state.catsFilters} onProgramDelete={onProgramDelete} editable={true} activeProgram={state.program_id} onProgramClick={showProgram} />
+
+            {
+                state.program_id ?
+                    <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} />
+                    :
+                    ''
+            }
+
+            {
+                state.program_id ?
+                    <CreateUserMassForm programId={state.program_id} onSubmit={onStudentMassCreate} />
+                    :
+                    ''
+            }
+
         </>
     )
 }

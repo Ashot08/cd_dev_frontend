@@ -153,6 +153,20 @@ export const studentAPI = {
 
     },
 
+    createStudentMass(data){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__user&create_mass`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+    },
+
     getStudentsProtocol(data){
         headers.set("Content-Type", "application/json");
         return fetch(`${root}/wp-json/courses_dashboard/v1/cd__protocol&students`, {

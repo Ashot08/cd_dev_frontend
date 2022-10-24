@@ -85,7 +85,8 @@ export const CreateUserForm = (props) => {
                 :
                 ''
             }
-            <div className={classes.result}>
+
+            <div className={classes.result + ( state.formResult ? ' cd__warning' : '' ) }>
                 {state.isLoading ? <Loader /> : state.formResult}
             </div>
         </div>

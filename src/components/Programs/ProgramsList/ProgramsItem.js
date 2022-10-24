@@ -3,6 +3,8 @@ import Popup from "reactjs-popup";
 import {Loader} from "../../Loader/Loader";
 import {useEffect, useState} from "react";
 import {programAPI, programCatAPI} from "../../../rest";
+import {CreateUserMassForm} from "../../forms/CreateUserForm/CreateUserMassForm";
+import {CreateUserForm} from "../../forms/CreateUserForm/CreateUserForm";
 export const ProgramsItem = (props) => {
 
     const [state, setState] = useState({

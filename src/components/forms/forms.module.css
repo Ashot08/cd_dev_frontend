@@ -1,3 +1,17 @@
 .result{
     margin: 20px 0;
 }
+
+.cd__students_mass_adding {
+    margin: 20px 0;
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 20px;
+}
+.cd__students_mass_template_link{
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+}
+.cd__button{
+    margin: 10px 0;
+}
