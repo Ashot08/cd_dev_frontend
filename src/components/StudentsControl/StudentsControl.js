@@ -230,11 +230,11 @@ export const StudentsControl = (props) => {
                 {state.programTitle ? (<h3>{state.programTitle}</h3>) : ''}
             </div>
 
+            {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} /> : ''}
+
             {state.program_id ? <UsersFilter filters={state.filters} onDisplayNameFilter={onDisplayNameFilter} onDateFilter={onDateFilter} />: ''}
 
             {content}
-
-            {state.program_id ? <CreateUserForm programId={state.program_id} onSubmit={onStudentCreate} /> : ''}
 
             {state.program_id ? <StudentsControlProtocol
                 students={Array.from(state.selectedStudents)}
