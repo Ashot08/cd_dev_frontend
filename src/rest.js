@@ -7,8 +7,6 @@ export const programAPI = {
 
     getPrograms(data){
 
-        // const username = 'AdminTraining';
-        // const password = 'Bcy1 A3xL ne6o HvtC 8fAk nNBU';
         headers.set("Content-Type", "application/json");
         // headers.set("Authorization", "Basic " + (`${username}:${password}`).toString('base64'));
 
@@ -125,7 +123,12 @@ export const programCatAPI = {
 export const studentAPI = {
     getStudents(program_id, page = 0, offset = 4, filters = {}){
         headers.set("Content-Type", "application/json");
-        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__students&program_id=${program_id}&page=${page}&offset=${offset}`, {
+        filters.program_id = program_id;
+        filters.page = page;
+        filters.offset = offset;
+
+        //return fetch(`${root}/wp-json/courses_dashboard/v1/cd__students&program_id=${program_id}&page=${page}&offset=${offset}`, {
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__students&get_students`, {
             method: 'POST',
             headers,
             body: JSON.stringify(filters)
@@ -213,7 +216,19 @@ export const studentAPI = {
             })
             .catch(error => console.error(error))
     },
-
+    getStudentProgress(data){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__students&get_progress`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+    },
 }
 
 export const userAPI = {
@@ -243,6 +258,20 @@ export const userAPI = {
                 return data;
             })
             .catch(error => console.error(error))
+    },
+    updateUsersPrograms(data){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__user&mass_add_to_programs`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
     }
+
 
 }

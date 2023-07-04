@@ -31,6 +31,7 @@ td:hover .edit{
 .popup{
     padding: 20px;
     position: relative;
+    min-height: 350px;
 }
 
 .close{
@@ -40,7 +41,26 @@ td:hover .edit{
     top: 6px;
     z-index: 1;
 }
-
+.snils_cell{
+    font-size: 12px;
+}
 .progress_td{
 
 }
+.progress_wrapper{
+    display: flex;
+    font-size: 12px;
+}
+.progress_wrapper > span{
+    display: flex;
+    align-items: center;
+}
+.progress_wrapper > span:first-child{
+    margin-right: 6px;
+}
+.progress_wrapper > span > div{
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+

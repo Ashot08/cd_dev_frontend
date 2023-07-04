@@ -139,6 +139,10 @@ export const StudentsControl = (props) => {
         return userAPI.updateUserPrograms(data);
     }
 
+    const getStudentProgress = (data) => {
+        return studentAPI.getStudentProgress(data);
+    }
+
     const onDateFilter = (filter) => {
         setState({
             ...state,
@@ -186,7 +190,6 @@ export const StudentsControl = (props) => {
                         <div className={classes.showCountText}>Отображать по: </div> {countItemsToShow(state.count, 5).map(
                         (i)=> {
                             const active = (+state.offset === +i ? ' ' + classes.active : '');
-                            console.log(+state.offset === +i)
                             return <div className={classes.showCount + active} key={'show_count_' + i} onClick={
                                 !active ?
                                 () => setState({
@@ -205,6 +208,7 @@ export const StudentsControl = (props) => {
                 </div>
 
                 <StudentsList
+                    all={false}
                     onStudentSelect={onStudentSelect}
                     onStudentUpdate={onStudentUpdate}
                     selectedStudents={state.selectedStudents}
@@ -213,6 +217,8 @@ export const StudentsControl = (props) => {
                     checkboxesDisable={state.checkboxesDisable}
                     onGetPrograms={onGetPrograms}
                     onUpdateUserPrograms={onUpdateUserPrograms}
+                    getStudentProgress={getStudentProgress}
+                    program_id={state.program_id}
                 />
                 <div>
                     {state.count && !state.loading ? <Paginator page={state.page} count={Math.ceil(state.count / state.offset)} changePage={changePage} /> : ''}

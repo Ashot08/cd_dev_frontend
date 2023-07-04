@@ -15,7 +15,7 @@ export const StudentsList = (props) => {
                         <th>Пароль</th>
                         <th>СНИЛС</th>
                         <th>Прогресс</th>
-                        <th>Дата окончания</th>
+                        {!props.all ? <th>Дата окончания</th> : ''}
                         <th>
                             <label className="">
                                 <input
@@ -28,6 +28,7 @@ export const StudentsList = (props) => {
                         </th>
                     </tr>
                     {props.students.map(s => <StudentsListItem
+                        all={props.all}
                         isSelectAll={props.isSelectAll}
                         checkboxesDisable={props.checkboxesDisable}
                         onStudentSelect={props.onStudentSelect}
@@ -37,6 +38,8 @@ export const StudentsList = (props) => {
                         student={s}
                         onGetPrograms={props.onGetPrograms}
                         onUpdateUserPrograms={props.onUpdateUserPrograms}
+                        getStudentProgress={props.getStudentProgress}
+                        program_id={props.program_id ? props.program_id : ''}
                     />)}
                 </tbody>
             </table>

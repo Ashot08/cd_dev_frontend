@@ -3,7 +3,7 @@ export const Loader = (props) => {
     return (
         <>
             <div className={classes.loader}>
-                <svg width="60px" height="60px" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg"
+                <svg width={props.width ? props.width + 'px' : '60px'} height={props.height ? props.height + 'px' : '60px'} version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg"
                      x="0px" y="0px" viewBox="0 0 100 100"
                      enableBackground="new 0 0 0 0">
                     <path fill="#f80000"

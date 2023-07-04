@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {Loader} from "../../Loader/Loader";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 export const StudentsListItem = (props) => {
     const [state, setState] = useState({
@@ -14,6 +16,12 @@ export const StudentsListItem = (props) => {
         programs: [],
         student_programs: new Set(props.student.student_programs),
         programsUpdateResult: '',
+        progress: '',
+        tests_result: {
+            total_tests_win: 0,
+            total_tests_count: 0
+        },
+        all_tests_result: [],
     });
 
 
@@ -32,6 +40,23 @@ export const StudentsListItem = (props) => {
             })
         }
     }, [state.isOpenPopup])
+
+    useEffect(() => {
+
+        props.getStudentProgress({
+            program_id: props.program_id,
+            student_id: props.student.user_id
+        }).then((res) => {
+            setState({
+                ...state,
+                progress: res.progress,
+                tests_result: res.tests_result,
+                all_tests_result: res.all_tests_result,
+            })
+        })
+
+
+    }, [])
 
     const checkProgram = (e) => {
 
@@ -131,14 +156,15 @@ export const StudentsListItem = (props) => {
     }}>{
         state.programs.map((p) => {
             return (
-                <>
-                    <div>
-                        <label key={p.id} >
-                            <input onChange={checkProgram} checked={state.student_programs.has(p.id)} name={p.id} type={'checkbox'} value={p.id} />
-                            {p.title}
-                        </label>
-                    </div>
-                </>
+
+                <div key={'student_program_' + p.id}>
+                    <label>
+                        <input onChange={checkProgram} checked={state.student_programs.has(p.id)} name={p.id}
+                               type={'checkbox'} value={p.id}/>
+                        {p.title}
+                    </label>
+                </div>
+
             )
         })
     }
@@ -153,10 +179,8 @@ export const StudentsListItem = (props) => {
         console.log(props.student.user_name)
     }
 
-
-
     return (
-        <tr>
+        <tr key={'user_item' + props.student.user_id}>
             <td>{props.student.user_id}</td>
             <td>
                 <span onClick={
@@ -176,48 +200,112 @@ export const StudentsListItem = (props) => {
                     modal
                     nested
                 >
+
                     <a className={classes.close} onClick={() => setState({
                         ...state,
                         isOpenPopup: false
                     })}>
                         &times;
                     </a>
+
                     <div className={classes.popup}>
-                        <div>
+
+                        <h3>
                             <strong>{props.student.user_name}</strong> ({props.student.user_login})
-                        </div>
-                        <div>
-                            <strong>Информация о студенте:</strong>
-                            <div>
-                                Email: {props.student.user_email}
-                            </div>
-                            <div>
-                                СНИЛС: {props.student.user_snils.toString()}
-                            </div>
-                        </div>
-                        <div>
-                            <div><strong>Программы:</strong></div>
-                            <div>
-                                { state.programs.length
-                                    ?
-                                    programsHTML
-                                    :
-                                    <Loader />
-                                }
-                            </div>
-                        </div>
+                        </h3>
+
+                        <Tabs>
+                            <TabList>
+                                <Tab>
+                                    <strong>Информация о студенте</strong>
+                                </Tab>
+                                <Tab>
+                                    <strong>Тесты</strong>
+                                </Tab>
+                                <Tab>
+                                    <strong>Программы</strong>
+                                </Tab>
+                            </TabList>
+
+                            <TabPanel>
+
+                                <p>
+                                    <div>
+                                        Email: {props.student.user_email}
+                                    </div>
+                                    <div>
+                                        СНИЛС: {props.student.user_snils.toString()}
+                                    </div>
+                                </p>
+
+                            </TabPanel>
+                            <TabPanel>
+
+                                <p>
+                                    {(state.all_tests_result.length > 0) ?
+                                        <ul>
+                                            {state.all_tests_result.map(t => <li> {t.title}. {t.best_score ? ' - Количество баллов: ' : ''} {t.best_score}</li>)}
+                                        </ul>
+                                        : <Loader/>}
+                                </p>
+
+                            </TabPanel>
+                            <TabPanel>
+                                <p>
+                                    { state.programs.length
+                                        ?
+                                        programsHTML
+                                        :
+                                        <Loader />
+                                    }
+                                </p>
+                            </TabPanel>
+                        </Tabs>
+
                     </div>
                 </Popup>
                 <Edit name={'display_name'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_login}</td>
             <td>{props.student.user_email}<Edit name={'user_email'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
             <td>{props.student.user_snils === props.student.user_login ? props.student.user_snils.toString() : '***'} <Edit name={'user_pass'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
-            <td>{props.student.user_snils.toString()}<Edit name={'user_snils'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
-            <td className={classes.progress_td}>
-                {/*{props.student.total_progress}% / */}
-                тесты ({props.student.total_tests.length})
+            <td className={classes.snils_cell}>{props.student.user_snils.toString()}<Edit name={'user_snils'} onStudentUpdate={props.onStudentUpdate} user_id={props.student.user_id} /></td>
+
+
+            <td
+                onClick={
+                    () => {
+                        setState({
+                            ...state,
+                            isOpenPopup: true
+                        })
+                    }
+                }
+                className={classes.progress_td}>
+
+                {state.tests_result.total_tests_count ?
+                    <div className={classes.progress_wrapper}>
+                        Тесты: {state.tests_result.total_tests_win} из {state.tests_result.total_tests_count}
+                    </div>
+                    : ''}
+
+                <div className={classes.progress_wrapper}>
+                        <span>
+                            {/*{state.progress ? state.progress : <Loader width={24} height={24} />}*/}
+                        </span>
+                    <span>
+                         тесты ({props.student.total_tests.length})
+                        </span>
+                </div>
+
             </td>
-            <td>{props.student.start_date}</td>
+
+
+            {!props.all ?
+                <td>{props.student.start_date}</td>
+            :
+                ''
+            }
+
             <td>
                 <label className={classes.label__checkbox}>
                     <input

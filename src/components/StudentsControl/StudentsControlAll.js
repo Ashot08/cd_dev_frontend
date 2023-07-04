@@ -22,9 +22,14 @@ export const StudentsControlAll = (props) => {
         offset: 10,
         count: 0,
         students: [],
+        programs: [],
         selectedStudents: new Set(),
+        selectedPrograms: new Set(),
         selectedStudentsCount: 0,
         isSelectAll: false,
+        isEditAllOpen: false,
+        isProgramsUpdating: false,
+        programsUpdateResult: '',
         filters: {
             dateFilter: {
                 from: '',
@@ -36,27 +41,20 @@ export const StudentsControlAll = (props) => {
     });
 
     useEffect(() => {
-        studentAPI.getStudents(state.program_id, state.page, state.offset, state.filters).then(res => {
-            setState(
-                {
-                    ...state,
-                    checkboxesDisable: false,
-                    loading: false,
-                    students: res.students,
-                    count: res.count,
-                })
+
+        onGetPrograms({page: 0, offset: 999}).then(res => {
+            setState({
+                ...state,
+                programs: res.programs
+            })
         })
+
+    }, [setState, state.isEditAllOpen])
+
+    useEffect(() => {
+        onGetStudents();
     }, [state.page, state.program_id, state.offset, state.selectedStudentsCount, state.filters])
 
-    const showStudents = (p, programTitle = '') => {
-        setState({
-            ...state,
-            page: 0,
-            loading: true,
-            program_id: p,
-            programTitle: programTitle
-        })
-    }
 
     const changePage = (p) => {
         setState(
@@ -115,6 +113,13 @@ export const StudentsControlAll = (props) => {
         })
     }
 
+    const onEditAll = () => {
+        setState({
+            ...state,
+            isEditAllOpen: !state.isEditAllOpen,
+        })
+    }
+
     const onStudentCreate = (data) => {
         return studentAPI.createStudent(data)
     }
@@ -135,8 +140,38 @@ export const StudentsControlAll = (props) => {
         return programAPI.getPrograms(page, offset);
     }
 
+    const getStudentProgress = (data) => {
+        return studentAPI.getStudentProgress(data);
+    }
+
+    const onGetStudents = () => {
+        setState(
+            {
+                ...state,
+                //loading: true,
+            })
+
+        setTimeout(function(){
+            studentAPI.getStudents('all', state.page, state.offset, state.filters).then(res => {
+                setState(
+                    {
+                        ...state,
+                        checkboxesDisable: false,
+                        loading: false,
+                        students: res.students,
+                        count: res.count,
+                    })
+            })
+        }, 500)
+
+    }
+
     const onUpdateUserPrograms = (data) => {
         return userAPI.updateUserPrograms(data);
+    }
+
+    const onUpdateUsersPrograms = (data) => {
+        return userAPI.updateUsersPrograms(data);
     }
 
     const onDateFilter = (filter) => {
@@ -163,6 +198,31 @@ export const StudentsControlAll = (props) => {
                 displayNameFilter: filter
             }
         })
+    }
+
+    const checkProgram = (e) => {
+
+        let programsClone = new Set(state.selectedPrograms);
+
+        if(state.selectedPrograms.has(e.target.value)){
+
+            programsClone.delete(e.target.value);
+            setState({
+                ...state,
+                selectedPrograms: programsClone
+            })
+
+        }else{
+
+            programsClone.add(e.target.value);
+
+            setState({
+                ...state,
+                selectedPrograms: programsClone
+            })
+
+        }
+
     }
 
     function countItemsToShow(totalCount, step){
@@ -205,6 +265,7 @@ export const StudentsControlAll = (props) => {
                 </div>
 
                 <StudentsList
+                    all={true}
                     onStudentSelect={onStudentSelect}
                     onStudentUpdate={onStudentUpdate}
                     selectedStudents={state.selectedStudents}
@@ -213,6 +274,7 @@ export const StudentsControlAll = (props) => {
                     checkboxesDisable={state.checkboxesDisable}
                     onGetPrograms={onGetPrograms}
                     onUpdateUserPrograms={onUpdateUserPrograms}
+                    getStudentProgress={getStudentProgress}
                 />
                 <div>
                     {state.count && !state.loading ? <Paginator page={state.page} count={Math.ceil(state.count / state.offset)} changePage={changePage} /> : ''}
@@ -222,6 +284,44 @@ export const StudentsControlAll = (props) => {
     }else if(state.program_id){
         content= <div className={classes.alarm}>Нет студентов</div>;
     }
+
+    const programsHTML = <form onSubmit={(e) => {
+        setState({
+            ...state,
+            isProgramsUpdating: true,
+        })
+        e.preventDefault();
+        const data = {
+            users_ids: Array.from(state.selectedStudents),
+            programs: Array.from(state.selectedPrograms),
+        }
+        onUpdateUsersPrograms(data).then(res => {
+            setState({
+                ...state,
+                isProgramsUpdating: false,
+                programsUpdateResult: res.message
+            })
+        });
+    }} >{
+        state.programs.map((p) => {
+            return (
+
+                    <div key={'p_' + p.id}>
+                        <label>
+                            <input onChange={checkProgram} checked={state.selectedPrograms.has(p.id)} name={p.id} type={'checkbox'} value={p.id} />
+                            {p.title}
+                        </label>
+                    </div>
+
+            )
+        })
+    }
+        <input type={"submit"} value={'Обновить'} />
+
+        <div>
+            {state.isProgramsUpdating ? <Loader/> : state.programsUpdateResult}
+        </div>
+    </form>;
 
     return (
         <>
@@ -233,6 +333,24 @@ export const StudentsControlAll = (props) => {
             {state.program_id ? <UsersFilter filters={state.filters} onDisplayNameFilter={onDisplayNameFilter} onDateFilter={onDateFilter} />: ''}
 
             {content}
+
+            <div className={classes.editAllStudents}>
+                <button onClick={onEditAll}>Редактировать</button>
+                {state.isEditAllOpen ?
+                    <>
+                        <div>
+                            <p>
+                                <strong>
+                                    Зачислить всех выбранных на:
+                                </strong>
+                            </p>
+                            {programsHTML}
+                        </div>
+
+                    </>
+                    : ''}
+            </div>
+
 
             {state.program_id ? <StudentsControlProtocol
                 students={Array.from(state.selectedStudents)}
