@@ -243,9 +243,22 @@ export const StudentsListItem = (props) => {
 
                                 <p>
                                     {(state.all_tests_result.length > 0) ?
-                                        <ul>
-                                            {state.all_tests_result.map(t => <li> {t.title}. {t.best_score ? ' - Количество баллов: ' : ''} {t.best_score}</li>)}
-                                        </ul>
+                                        <table>
+                                            <tbody>
+                                            <tr>
+                                                <th>Наименование теста</th>
+                                                <th>Баллов</th>
+                                                <th>Попыток</th>
+                                                <th>Итог</th>
+                                            </tr>
+                                            {state.all_tests_result.map(t => { return <tr>
+                                                <td>{t.title}</td>
+                                                <td>{t.best_score ? t.best_score : '0'}</td>
+                                                <td>{t.attempts}</td>
+                                                <td>{t.is_passed ? 'Зачет' : 'Незачет' }</td>
+                                            </tr>})}
+                                            </tbody>
+                                        </table>
                                         : <Loader/>}
                                 </p>
 
