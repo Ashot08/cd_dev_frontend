@@ -295,11 +295,19 @@ export const StudentsListItem = (props) => {
                 }
                 className={classes.progress_td}>
 
+
+
                 {state.tests_result.total_tests_count ?
                     <div className={classes.progress_wrapper}>
                         Тесты: {state.tests_result.total_tests_win} из {state.tests_result.total_tests_count}
                     </div>
-                    : ''}
+                    :
+                    state.all_tests_result ?
+                            <div className={classes.progress_wrapper}>
+                                Тесты: {state.all_tests_result.reduce((acc, currentValue) => {return currentValue.is_passed ? acc+1 : acc}, 0)} из {state.all_tests_result.length}
+                            </div>
+                            : ''
+                }
 
                 <div className={classes.progress_wrapper}>
                         <span>
