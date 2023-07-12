@@ -37,6 +37,21 @@ export const programAPI = {
 
     },
 
+    getEditableTree (program_id){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__programs/get_editable_tree`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({program_id})
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+
+    },
+
     delete( program_id ){
         headers.set("Content-Type", "application/json");
         return fetch(`${root}/wp-json/courses_dashboard/v1/cd__programs/delete`, {

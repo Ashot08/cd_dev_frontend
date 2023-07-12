@@ -17,7 +17,9 @@ export const ProgramsItem = (props) => {
         catsActive: new Set(),
         catToAssign: {id: 0, action: ''},
         catsChangeResult: '',
-        catsLoading: false
+        catsLoading: false,
+        editableTree : {},
+        isEditProgramStructureLoading: false
     })
 
     useEffect(() => {
@@ -29,8 +31,35 @@ export const ProgramsItem = (props) => {
                     catsActive: new Set(res.active)
                 })
             })
+
+
+
         }
     }, [state.isOpenEditProgram])
+
+    useEffect(() => {
+        programAPI.getEditableTree(props.id).then((res) => {
+            setState(
+                {
+                    ...state,
+                    editableTree: res,
+                    isEditProgramStructureLoading: false
+                }
+            )
+        })
+    }, [state.isEditProgramStructureLoading])
+
+    const onEditProgramStructure = () =>{
+
+            setState(
+                {
+                    ...state,
+                    isEditProgramStructureLoading: true
+                }
+            )
+            //console.log(state.editableTree)
+
+    }
 
     useEffect( () => {
         if(state.isOpenEditProgram){
@@ -198,8 +227,11 @@ export const ProgramsItem = (props) => {
                             <Tab>
                                 <strong>Категории</strong>
                             </Tab>
-                            <Tab>
+                            <Tab onClick={onEditProgramStructure}>
                                 <strong>Состав программы</strong>
+                            </Tab>
+                            <Tab>
+                                <strong>Информация о программе</strong>
                             </Tab>
                         </TabList>
 
@@ -219,11 +251,22 @@ export const ProgramsItem = (props) => {
                             </div>
 
                         </TabPanel>
+
                         <TabPanel>
 
-                            <p>
-                                2
-                            </p>
+                            <div>
+                                <strong>Состав программы</strong>
+                            </div>
+
+                            {state.isEditProgramStructureLoading ? <Loader /> :
+                                ''
+                            }
+
+                        </TabPanel>
+
+                        <TabPanel>
+
+                            <div><strong>Информация о программе</strong></div>
 
                         </TabPanel>
 
