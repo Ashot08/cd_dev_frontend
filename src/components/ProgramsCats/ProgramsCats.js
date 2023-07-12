@@ -104,7 +104,7 @@ export const ProgramsCats = (props) => {
             </div>
             <input type="submit" value={'Создать'}/>
         </form>
-
+        {typeof categories !== 'undefined' && categories.length > 0 ?
         <form>
             <div>Фильтр по категориям</div>
             <div className={classes.categories}>
@@ -114,5 +114,8 @@ export const ProgramsCats = (props) => {
             </div>
 
         </form>
+            :
+            ''
+        }
     </div>)
 }

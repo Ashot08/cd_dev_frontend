@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {programAPI, programCatAPI} from "../../../rest";
 import {CreateUserMassForm} from "../../forms/CreateUserForm/CreateUserMassForm";
 import {CreateUserForm} from "../../forms/CreateUserForm/CreateUserForm";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 export const ProgramsItem = (props) => {
 
     const [state, setState] = useState({
@@ -191,18 +192,43 @@ export const ProgramsItem = (props) => {
                     <div>
                         <h3>Редактирование программы</h3>
                     </div>
-                    <div>
-                        <div><strong>Присвоить категорию</strong></div>
 
-                        {state.catsLoading ? <Loader />: <div className={classes.categories}>{cats}</div>}
+                    <Tabs>
+                        <TabList>
+                            <Tab>
+                                <strong>Категории</strong>
+                            </Tab>
+                            <Tab>
+                                <strong>Состав программы</strong>
+                            </Tab>
+                        </TabList>
 
-                        <div>
+                        <TabPanel>
 
-                                {state.catsChangeResult}
+                            <div>
+                                <div><strong>Присвоить категорию</strong></div>
 
-                        </div>
+                                {state.catsLoading ? <Loader />: <div className={classes.categories}>{cats}</div>}
 
-                    </div>
+                                <div>
+
+                                    {state.catsChangeResult}
+
+                                </div>
+
+                            </div>
+
+                        </TabPanel>
+                        <TabPanel>
+
+                            <p>
+                                2
+                            </p>
+
+                        </TabPanel>
+
+                    </Tabs>
+
                 </div>
             </Popup>
 
