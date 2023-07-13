@@ -64,3 +64,28 @@
     background-color: rgba(0,0,0,0.05);
     cursor: pointer;
 }
+.edit_programs{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 40px;
+}
+.editable_program{
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+.editable_program:hover{
+    opacity: 0.9;
+}
+.editable_program img{
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.editable_program_name{
+    margin: 10px 0;
+}

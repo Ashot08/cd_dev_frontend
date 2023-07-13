@@ -19,7 +19,7 @@ export const ProgramsItem = (props) => {
         catsChangeResult: '',
         catsLoading: false,
         editableTree : {},
-        isEditProgramStructureLoading: false
+        isEditProgramStructureLoading: true
     })
 
     useEffect(() => {
@@ -39,10 +39,18 @@ export const ProgramsItem = (props) => {
 
     useEffect(() => {
         programAPI.getEditableTree(props.id).then((res) => {
+
+            const structureArray = [];
+
+            for(let el in res){
+
+                structureArray.push(res[el])
+
+            }
             setState(
                 {
                     ...state,
-                    editableTree: res,
+                    editableTree: structureArray,
                     isEditProgramStructureLoading: false
                 }
             )
@@ -57,7 +65,7 @@ export const ProgramsItem = (props) => {
                     isEditProgramStructureLoading: true
                 }
             )
-            //console.log(state.editableTree)
+            console.log((state.editableTree))
 
     }
 
@@ -254,12 +262,19 @@ export const ProgramsItem = (props) => {
 
                         <TabPanel>
 
-                            <div>
-                                <strong>Состав программы</strong>
-                            </div>
-
                             {state.isEditProgramStructureLoading ? <Loader /> :
-                                ''
+                                <div className={classes.edit_programs}>
+                                    {
+                                        state.editableTree.map((el) => {
+                                            return (
+                                                <div className={classes.editable_program}>
+                                                    <div><img src={el.image_url} alt={el.name} /></div>
+                                                    <div className={classes.editable_program_name}>{el.name}</div>
+                                                </div>
+                                            )
+                                        } )
+                                    }
+                                </div>
                             }
 
                         </TabPanel>
@@ -278,3 +293,25 @@ export const ProgramsItem = (props) => {
         </div>
     )
 }
+
+// function recursiveMap(arr){
+//
+//     arr.map(el => {
+//
+//         return (
+//
+//             <input type={'checkbox'}>
+//
+//         )
+//
+//         if(typeof arr !== 'undefined' && el.children.length > 0 ){
+//
+//
+//
+//             recursiveMap(el.children)
+//
+//         }
+//
+//     })
+//
+// }
