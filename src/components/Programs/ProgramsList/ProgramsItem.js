@@ -65,8 +65,6 @@ export const ProgramsItem = (props) => {
                     isEditProgramStructureLoading: true
                 }
             )
-            console.log((state.editableTree))
-
     }
 
     useEffect( () => {
@@ -271,7 +269,16 @@ export const ProgramsItem = (props) => {
                                                     <div className={classes.editable_program}>
                                                         <div><img src={el.image_url} alt={el.name} /></div>
                                                         <div className={classes.editable_program_name}>{el.name}</div>
-                                                        {recursiveMap(el.children)}
+
+                                                        {el.children.length
+                                                            ?
+                                                            <ul>
+                                                                {recursiveMap(el.children)}
+                                                            </ul>
+                                                            :
+                                                            ''
+                                                        }
+
                                                     </div>
 
                                                 </>
@@ -307,15 +314,23 @@ function recursiveMap(arr) {
     return (
         arr.map(el => {
 
+            console.log(el);
+
             return (
 
                 <li>
                     <label htmlFor="">
-                        <input type="checkbox" value={el.id}/>
+                        <input checked={el.is_checked} type="checkbox" value={el.id}/>
+                        {el.children.length ? <span>+</span> : ''}
                         <span>{el.name}</span>
-                        <ul>
-                            {el.children.length ? recursiveMap(el.children) : ''}
-                        </ul>
+                        {el.children.length ?
+                            <ul data-open={el.is_open ? true : false}>
+                                {recursiveMap(el.children)}
+                            </ul>
+                            :
+                            ''
+                        }
+
                     </label>
                 </li>
 
