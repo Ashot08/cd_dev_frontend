@@ -154,6 +154,36 @@ export const ProgramsItem = (props) => {
         </label>
     })
 
+    const recursiveMap = (arr) => {
+
+        return (
+            arr.map(el => {
+
+                return (
+
+                    <li>
+                        <label htmlFor="">
+                            {el.children.length ? <span>+</span> : ''}
+                            <input onChange={()=>console.log('change')} checked={el.is_checked} type="checkbox" value={el.id}/>
+                            <span>{el.name}</span>
+                            {el.children.length ?
+                                <ul data-open={el.is_open ? true : false}>
+                                    {recursiveMap(el.children)}
+                                </ul>
+                                :
+                                ''
+                            }
+
+                        </label>
+                    </li>
+
+                )
+
+            })
+        )
+
+    }
+
     return (
         <div
             className={classes.programs__item + ' ' + (props.isActive ? classes.active : '')}
@@ -263,10 +293,11 @@ export const ProgramsItem = (props) => {
                             {state.isEditProgramStructureLoading ? <Loader /> :
                                 <div className={classes.edit_programs}>
                                     {
+
                                         state.editableTree.map((el) => {
                                             return (
                                                 <>
-                                                    <div className={classes.editable_program}>
+                                                    <div onClick={()=>console.log(state.editableTree)} className={classes.editable_program}>
                                                         <div><img src={el.image_url} alt={el.name} /></div>
                                                         <div className={classes.editable_program_name}>{el.name}</div>
 
@@ -309,34 +340,3 @@ export const ProgramsItem = (props) => {
     )
 }
 
-function recursiveMap(arr) {
-
-    return (
-        arr.map(el => {
-
-            console.log(el);
-
-            return (
-
-                <li>
-                    <label htmlFor="">
-                        <input checked={el.is_checked} type="checkbox" value={el.id}/>
-                        {el.children.length ? <span>+</span> : ''}
-                        <span>{el.name}</span>
-                        {el.children.length ?
-                            <ul data-open={el.is_open ? true : false}>
-                                {recursiveMap(el.children)}
-                            </ul>
-                            :
-                            ''
-                        }
-
-                    </label>
-                </li>
-
-            )
-
-        })
-    )
-
-}
