@@ -267,13 +267,21 @@ export const ProgramsItem = (props) => {
                                     {
                                         state.editableTree.map((el) => {
                                             return (
-                                                <div className={classes.editable_program}>
-                                                    <div><img src={el.image_url} alt={el.name} /></div>
-                                                    <div className={classes.editable_program_name}>{el.name}</div>
-                                                </div>
+                                                <>
+                                                    <div className={classes.editable_program}>
+                                                        <div><img src={el.image_url} alt={el.name} /></div>
+                                                        <div className={classes.editable_program_name}>{el.name}</div>
+                                                        {recursiveMap(el.children)}
+                                                    </div>
+
+                                                </>
                                             )
                                         } )
+
+
                                     }
+
+
                                 </div>
                             }
 
@@ -294,24 +302,26 @@ export const ProgramsItem = (props) => {
     )
 }
 
-// function recursiveMap(arr){
-//
-//     arr.map(el => {
-//
-//         return (
-//
-//             <input type={'checkbox'}>
-//
-//         )
-//
-//         if(typeof arr !== 'undefined' && el.children.length > 0 ){
-//
-//
-//
-//             recursiveMap(el.children)
-//
-//         }
-//
-//     })
-//
-// }
+function recursiveMap(arr) {
+
+    return (
+        arr.map(el => {
+
+            return (
+
+                <li>
+                    <label htmlFor="">
+                        <input type="checkbox" value={el.id}/>
+                        <span>{el.name}</span>
+                        <ul>
+                            {el.children.length ? recursiveMap(el.children) : ''}
+                        </ul>
+                    </label>
+                </li>
+
+            )
+
+        })
+    )
+
+}
