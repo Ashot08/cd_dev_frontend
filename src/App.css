@@ -54,4 +54,6 @@ table th {
 .popup-content{
   min-width: 70%;
   max-width: 70%;
+  max-height: 90%;
+  overflow-y: auto;
 }

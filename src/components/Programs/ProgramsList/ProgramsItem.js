@@ -26,6 +26,7 @@ export const ProgramsItem = (props) => {
         //  25: 'delete'
         //  33: 'add'
         // }
+        updateResult: ''
     })
 
     useEffect(() => {
@@ -156,12 +157,18 @@ export const ProgramsItem = (props) => {
 
         if(Object.keys(state.editProgramCoursesList).length){
             programAPI.updateProgram({program_id: props.id, courses_list: state.editProgramCoursesList}).then(res => {
-                console.log(res)
                 setState({
                     ...state,
                     editProgramCoursesList: {},
+                    updateResult: res.message,
                     isUpdating: false
                 })
+            })
+        } else {
+            setState({
+                ...state,
+                updateResult: 'Вы не внесли никаких изменений',
+                isUpdating: false
             })
         }
 
@@ -374,6 +381,8 @@ export const ProgramsItem = (props) => {
                                         }
                                     </div>
                                     <br/>
+                                    {state.updateResult ? <div><div className={'cd__warning'}>{state.updateResult}</div></div> : '' }
+
                                     {!state.isUpdating ? <button onClick={updateProgram}>Обновить</button> : <Loader/>}
                                 </div>
                             }
