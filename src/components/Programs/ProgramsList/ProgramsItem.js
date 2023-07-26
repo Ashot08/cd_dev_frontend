@@ -391,8 +391,6 @@ export const ProgramsItem = (props) => {
 
                         <TabPanel>
 
-                            <div><strong>Информация о программе</strong></div>
-
                             <div>
                                 <label htmlFor="">
                                     <p>Наименование программы:</p>
