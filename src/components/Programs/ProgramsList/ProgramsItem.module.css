@@ -74,14 +74,14 @@
 .edit_programs ul{
     list-style: none;
     padding: 0 5px;
-    padding-left: 10px;
+    padding-left: 20px;
     text-align: left;
     font-weight: 400;
     font-size: 12px;
     margin-bottom: 10px;
 }
 .edit_programs li{
-    margin: 5px 0;
+    margin: 8px 0;
 }
 .editable_program{
     text-align: center;
@@ -89,19 +89,41 @@
     border: 1px solid rgba(0,0,0,0.1);
     cursor: pointer;
 }
+.editable_program label > div{
+    display: flex;
+    align-items: center;
+}
 .editable_program:hover{
     opacity: 0.9;
+}
+.editable_program > ul{
+    padding-left: 5px;
+}
+.editable_program__img_wrapper{
+    max-height: 200px;
+    overflow: hidden;
 }
 .editable_program img{
     display: block;
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: auto;
     object-fit: cover;
     object-position: center;
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 .editable_program_name{
     margin: 10px 0;
+}
+.list_toggler{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    min-width: 15px;
+    min-height: 15px;
+    line-height: 1;
+    border: 1px solid rgba(0,0,0,0.1);
 }
 [data-open="false"]{
     display: none;

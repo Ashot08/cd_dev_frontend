@@ -19,7 +19,13 @@ export const ProgramsItem = (props) => {
         catsChangeResult: '',
         catsLoading: false,
         editableTree : {},
-        isEditProgramStructureLoading: true
+        isEditProgramStructureLoading: true,
+        editProgramCoursesList: {},
+        isUpdating: false,
+        //editProgramCoursesList: {
+        //  25: 'delete'
+        //  33: 'add'
+        // }
     })
 
     useEffect(() => {
@@ -31,9 +37,6 @@ export const ProgramsItem = (props) => {
                     catsActive: new Set(res.active)
                 })
             })
-
-
-
         }
     }, [state.isOpenEditProgram])
 
@@ -145,6 +148,27 @@ export const ProgramsItem = (props) => {
 
     }
 
+    const updateProgram = () => {
+        setState({
+            ...state,
+            isUpdating: true
+        })
+
+        if(Object.keys(state.editProgramCoursesList).length){
+            programAPI.updateProgram({program_id: props.id, courses_list: state.editProgramCoursesList}).then(res => {
+                console.log(res)
+                setState({
+                    ...state,
+                    editProgramCoursesList: {},
+                    isUpdating: false
+                })
+            })
+        }
+
+
+        console.log('update')
+    }
+
     if(state.deleted) return;
 
     const cats = state.cats.map((cat) => {
@@ -175,17 +199,26 @@ export const ProgramsItem = (props) => {
 
                     <li>
                         <label htmlFor="">
-
-                            {el.children.length
-                                ?
-                                <span data-id={el.id} onClick={(e) => {toggleOpen(e)}}>
+                            <div>
+                                {el.children.length
+                                    ?
+                                    <span className={classes.list_toggler} data-id={el.id} onClick={(e) => {toggleOpen(e)}}>
                                     {el.is_open ? '-' : '+'}
                                 </span>
-                                : ''
-                            }
+                                    : ''
+                                }
 
-                            <input onChange={()=>console.log('change')} checked={el.is_checked} type="checkbox" value={el.id}/>
-                            <span>{el.name}</span>
+                                <input onChange={(e)=>{
+                                    const newEditProgramCoursesList = state.editProgramCoursesList;
+                                    newEditProgramCoursesList[el.id] = e.target.checked ? 'add' : 'delete';
+                                    setState({
+                                        ...state,
+                                        editProgramCoursesList: newEditProgramCoursesList
+                                    })
+                                }} defaultChecked={el.is_checked} type="checkbox" value={el.id}/>
+                                <span>{el.name}</span>
+                            </div>
+
                             {el.children.length ?
                                 <ul data-open={el.is_open ? true : false}>
                                     {recursiveMap(el.children)}
@@ -275,7 +308,7 @@ export const ProgramsItem = (props) => {
                 </a>
                 <div className={classes.popup}>
                     <div>
-                        <h3>Редактирование программы</h3>
+                        <h3>Редактирование программы "{props.title}"</h3>
                     </div>
 
                     <Tabs>
@@ -311,35 +344,37 @@ export const ProgramsItem = (props) => {
                         <TabPanel>
 
                             {state.isEditProgramStructureLoading ? <Loader /> :
-                                <div className={classes.edit_programs}>
-                                    {
+                                <div>
+                                    <div className={classes.edit_programs}>
+                                        {
 
-                                        state.editableTree.map((el) => {
-                                            return (
-                                                <>
-                                                    <div onClick={()=>console.log(state.editableTree)} className={classes.editable_program}>
-                                                        <div><img src={el.image_url} alt={el.name} /></div>
-                                                        <div className={classes.editable_program_name}>{el.name}</div>
+                                            state.editableTree.map((el) => {
+                                                return (
+                                                    <>
+                                                        <div onClick={()=>console.log(state.editableTree)} className={classes.editable_program}>
+                                                            <div className={classes.editable_program__img_wrapper}><img src={el.image_url} alt={el.name} /></div>
+                                                            <div className={classes.editable_program_name}>{el.name}</div>
 
-                                                        {el.children.length
-                                                            ?
-                                                            <ul>
-                                                                {recursiveMap(el.children)}
-                                                            </ul>
-                                                            :
-                                                            ''
-                                                        }
+                                                            {el.children.length
+                                                                ?
+                                                                <ul>
+                                                                    {recursiveMap(el.children)}
+                                                                </ul>
+                                                                :
+                                                                ''
+                                                            }
 
-                                                    </div>
+                                                        </div>
 
-                                                </>
-                                            )
-                                        } )
-
-
-                                    }
+                                                    </>
+                                                )
+                                            } )
 
 
+                                        }
+                                    </div>
+                                    <br/>
+                                    {!state.isUpdating ? <button onClick={updateProgram}>Обновить</button> : <Loader/>}
                                 </div>
                             }
 
