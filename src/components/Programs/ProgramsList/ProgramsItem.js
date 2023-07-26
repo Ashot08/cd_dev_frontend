@@ -393,6 +393,23 @@ export const ProgramsItem = (props) => {
 
                             <div><strong>Информация о программе</strong></div>
 
+                            <div>
+                                <label htmlFor="">
+                                    <p>Наименование программы:</p>
+                                    <input type={'text'} value={props.title}/>
+                                </label>
+                            </div>
+                            <div>
+                                <label htmlFor="">
+                                    <p>Описание программы:</p>
+                                    <textarea value={props.description}/>
+                                </label>
+
+                            </div>
+                            <p>
+                                <button>Обновить</button>
+                            </p>
+
                         </TabPanel>
 
                     </Tabs>
