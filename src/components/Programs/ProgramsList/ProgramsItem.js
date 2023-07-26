@@ -156,6 +156,18 @@ export const ProgramsItem = (props) => {
 
     const recursiveMap = (arr) => {
 
+        function toggleOpen (e) {
+            const ul = e.target.closest('label').querySelector('ul');
+            if(ul.dataset.open === 'false'){
+                e.target.innerHTML = '-';
+                ul.dataset.open = 'true';
+            } else {
+                e.target.innerHTML = '+';
+                ul.dataset.open = 'false';
+            }
+
+        }
+
         return (
             arr.map(el => {
 
@@ -163,7 +175,15 @@ export const ProgramsItem = (props) => {
 
                     <li>
                         <label htmlFor="">
-                            {el.children.length ? <span>+</span> : ''}
+
+                            {el.children.length
+                                ?
+                                <span data-id={el.id} onClick={(e) => {toggleOpen(e)}}>
+                                    {el.is_open ? '-' : '+'}
+                                </span>
+                                : ''
+                            }
+
                             <input onChange={()=>console.log('change')} checked={el.is_checked} type="checkbox" value={el.id}/>
                             <span>{el.name}</span>
                             {el.children.length ?
