@@ -67,6 +67,21 @@ export const programAPI = {
 
     },
 
+    updateMeta (data){
+        headers.set("Content-Type", "application/json");
+        return fetch(`${root}/wp-json/courses_dashboard/v1/cd__programs/update_meta`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data;
+            })
+            .catch(error => console.error(error))
+
+    },
+
     delete( program_id ){
         headers.set("Content-Type", "application/json");
         return fetch(`${root}/wp-json/courses_dashboard/v1/cd__programs/delete`, {

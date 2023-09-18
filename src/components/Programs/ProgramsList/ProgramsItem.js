@@ -22,6 +22,10 @@ export const ProgramsItem = (props) => {
         isEditProgramStructureLoading: true,
         editProgramCoursesList: {},
         isUpdating: false,
+        isMetaUpdating: false,
+        metaUpdateResult: '',
+        programTitle: props.title,
+        programDescription: props.description,
         //editProgramCoursesList: {
         //  25: 'delete'
         //  33: 'add'
@@ -174,6 +178,27 @@ export const ProgramsItem = (props) => {
 
 
         console.log('update')
+    }
+
+    const updateMeta = (e) => {
+        e.preventDefault();
+        setState({
+            ...state,
+            isMetaUpdating: true
+        })
+
+        programAPI.updateMeta({program_id: props.id, title: state.programTitle, description: state.programDescription})
+            .then((res) => {
+                setState({
+                    ...state,
+                    isMetaUpdating: false,
+                    metaUpdateResult: res.message,
+                })
+                console.log(res);
+            })
+
+        console.log('META')
+
     }
 
     if(state.deleted) return;
@@ -390,23 +415,37 @@ export const ProgramsItem = (props) => {
                         </TabPanel>
 
                         <TabPanel>
+                            {
+                                state.isMetaUpdating
+                                    ?
+                                    <Loader />
+                                    :
+                                    <form onSubmit={updateMeta}>
+                                        <div>
+                                            <label htmlFor="">
+                                                <p>Наименование программы:</p>
+                                                <input
+                                                    onChange={(e) => setState({...state, programTitle: e.target.value})}
+                                                    type={'text'}
+                                                    value={state.programTitle}/>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="">
+                                                <p>Описание программы:</p>
+                                                <textarea onChange={(e) => setState({...state, programDescription: e.target.value})} value={state.programDescription}/>
+                                            </label>
 
-                            <div>
-                                <label htmlFor="">
-                                    <p>Наименование программы:</p>
-                                    <input type={'text'} value={props.title}/>
-                                </label>
-                            </div>
-                            <div>
-                                <label htmlFor="">
-                                    <p>Описание программы:</p>
-                                    <textarea value={props.description}/>
-                                </label>
+                                        </div>
 
-                            </div>
-                            <p>
-                                <button>Обновить</button>
-                            </p>
+                                        {state.metaUpdateResult ? <div><div className={'cd__warning'}>{state.metaUpdateResult}</div></div> : '' }
+
+                                        <p>
+                                            <button>Обновить</button>
+                                        </p>
+                                    </form>
+                            }
+
 
                         </TabPanel>
 

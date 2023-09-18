@@ -51,6 +51,7 @@ export const ProgramsList = (props) => {
                         return (<ProgramsItem
                             editable={props.editable}
                             title={program.title}
+                            description={program.description}
                             date={program.create_date}
                             onProgramClick={props.onProgramClick}
                             id = {program.id}
